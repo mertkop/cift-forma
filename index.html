@@ -237,7 +237,7 @@ input{-webkit-user-select:text;user-select:text}
 </section>
 
 </div>
-<script src="config.js?v=2"></script>
+<script src="config.js?v=3"></script>
 <script src="data.js?v=2"></script>
 <script>
 /* ---------- dil ---------- */
@@ -604,7 +604,7 @@ const net={
   on:(p,cb)=>{if(NET.mock){const l={p,cb,j:undefined};mL.push(l);setTimeout(()=>{if(l.dead)return;const v=mGet(p);l.j=JSON.stringify(v);cb(v)},0);return()=>{l.dead=true;mL=mL.filter(x=>x!==l)}}
     const r=NET.db.ref(p),h=r.on('value',x=>cb(x.val()));return()=>r.off('value',h)},
   tx:(p,fn)=>{if(NET.mock){const v=mGet(p),nv=fn(v==null?null:JSON.parse(JSON.stringify(v)));if(nv===undefined)return Promise.resolve({ok:false,val:v});mSet(p,nv);return Promise.resolve({ok:true,val:nv})}
-    return NET.db.ref(p).transaction(fn).then(r=>({ok:r.committed,val:r.snapshot.val()}))},
+    let skip=false;return NET.db.ref(p).transaction(cur=>{skip=false;const nv=fn(cur);if(nv===undefined){if(cur===null){skip=true;return null}return}return nv},undefined,false).then(r=>({ok:r.committed&&!skip,val:r.snapshot.val()}))},
   bye:(p,v)=>{if(NET.mock)mBye.push([p,v]);else NET.db.ref(p).onDisconnect().set(v)},
   unbye:p=>{if(NET.mock)mBye=mBye.filter(x=>x[0]!==p);else NET.db.ref(p).onDisconnect().cancel()}
 };
