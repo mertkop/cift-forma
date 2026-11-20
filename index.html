@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#08130f">
+<title>Çift Forma</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+@font-face{font-family:"Barlow Condensed";font-weight:700;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:"Barlow Condensed";font-weight:700;src:url(fonts/barlow-condensed-latin-ext-700-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:"Barlow Condensed";font-weight:800;src:url(fonts/barlow-condensed-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:"Barlow Condensed";font-weight:800;src:url(fonts/barlow-condensed-latin-ext-800-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:Barlow;font-weight:400;src:url(fonts/barlow-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:Barlow;font-weight:400;src:url(fonts/barlow-latin-ext-400-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:Barlow;font-weight:600;src:url(fonts/barlow-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:Barlow;font-weight:600;src:url(fonts/barlow-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+:root{--bg:#08130f;--panel:#10221b;--line:#1f3a2f;--ink:#eef5f0;--mut:#8aa397;--acc:#c6f135;--me:#35d0f1;--bot:#ff7a59;--bad:#ff5468}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+body{background:radial-gradient(120% 60% at 50% 0%,#143326 0%,var(--bg) 60%)}
+#app{height:100vh;height:100dvh;max-width:480px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;
+ padding:calc(12px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+.scr{display:none;flex:1;min-height:0;flex-direction:column}
+.scr.on{display:flex}
+h1,h2,.d{font-family:"Barlow Condensed",sans-serif;font-weight:800;letter-spacing:.02em;margin:0;text-transform:uppercase}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{-webkit-user-select:text;user-select:text}
+.mut{color:var(--mut)}
+.toprow{display:flex;justify-content:space-between;align-items:center}
+.pill{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:600;font-size:13px}
+.lang{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{padding:4px 11px;border-radius:999px;font-weight:600;font-size:13px;color:var(--mut)}
+.lang button.on{background:var(--acc);color:#0b1a05}
+.logo{margin-top:2vh;text-align:center}
+.logo h1{font-size:60px;line-height:.9}
+.logo h1 b{color:var(--acc)}
+.logo p{margin:10px 0 0;color:var(--mut);font-size:15px}
+.menu{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+.card h2{font-size:24px}
+.card small{color:var(--mut);display:block;margin-top:2px}
+.seg{display:flex;gap:6px;margin:10px 0}
+.seg button{flex:1;padding:9px 0;border-radius:10px;background:#0a1813;border:1px solid var(--line);font-weight:600;color:var(--mut)}
+.seg button.on{background:var(--acc);color:#0b1a05;border-color:var(--acc)}
+.btn{display:block;width:100%;padding:13px;border-radius:12px;background:var(--acc);color:#0b1a05;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:.04em}
+.btn.ghost{background:#0a1813;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.45}
+.rowbtn{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;gap:8px}
+.rowbtn .go{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:26px;color:var(--acc)}
+.crow{margin-top:10px;padding:9px 12px;border-radius:10px;background:#0a1813;border:1px solid var(--line)}
+.crow span.l{color:var(--mut);font-size:12px;display:block}
+.crow b{font-weight:600;font-size:15px}
+.foot{text-align:center;color:var(--mut);font-size:12px}
+.crest{--s:64px;width:var(--s);height:var(--s);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;
+ background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%);border:2px solid rgba(255,255,255,.28);
+ font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:calc(var(--s)*.34);color:#fff;text-shadow:0 1px 2px #000,0 0 4px #000}
+.crest.nat{background:#0a1813;font-size:calc(var(--s)*.56);text-shadow:none;font-family:system-ui,sans-serif}
+.crest.sm{--s:20px;border-width:1px;font-size:0}
+.crest.sm.nat{font-size:13px;border:0;background:none}
+.crest.empty{background:#0a1813;border-style:dashed;color:var(--mut);text-shadow:none}
+.top{display:flex;align-items:center;gap:8px}
+.back{width:34px;height:34px;border-radius:50%;background:var(--panel);border:1px solid var(--line);font-size:18px;flex:none}
+.score{flex:1;display:flex;align-items:center;justify-content:center;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 12px}
+.side{display:flex;flex-direction:column;align-items:center;min-width:86px}
+.side .nm{font-size:12px;color:var(--mut);font-weight:600}
+.pips{display:flex;gap:5px;margin-top:4px}
+.pips i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line)}
+.side.me .pips i.on{background:var(--me);border-color:var(--me)}
+.side.bot .pips i.on{background:var(--bot);border-color:var(--bot)}
+.warn{font-size:11px;color:var(--bad);height:13px;margin-top:2px}
+.score .vs{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:30px}
+#head{min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:10px;text-align:center}
+.big{font-size:88px;line-height:.9;color:var(--acc)}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(1.6);opacity:.2}to{transform:scale(1);opacity:1}}
+.duo{display:flex;align-items:center;justify-content:center;gap:12px;width:100%}
+.duo .t{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.duo .t span.n{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.duo .t span.w{font-size:11px;color:var(--mut)}
+.duo .mid{font-family:"Barlow Condensed",sans-serif;font-weight:800;text-align:center;line-height:1}
+.duo .mid b{display:block;font-size:40px;color:var(--acc)}
+.duo .mid small{font-size:12px;color:var(--mut);letter-spacing:.06em}
+.bar{height:6px;width:100%;background:var(--line);border-radius:3px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--acc);transform-origin:left;animation:shrink 10s linear forwards}
+@keyframes shrink{to{transform:scaleX(0)}}
+#inp{display:none;margin-top:10px}
+#inp.on{display:block}
+#q,.q{width:100%;padding:13px 14px;border-radius:12px;border:2px solid var(--line);background:#0a1813;color:var(--ink);font:600 18px Barlow,sans-serif;outline:none}
+#q:focus,.q:focus{border-color:var(--acc)}
+#q:disabled{opacity:.5}
+.sugg{margin-top:6px;display:flex;flex-direction:column;gap:5px}
+.sugg button{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--line);text-align:left;font-weight:600;font-size:16px}
+.sugg button.sel{border-color:var(--acc);background:#1a3320}
+.sugg button i{font-style:normal;color:var(--mut);font-weight:400;font-size:13px;margin-left:auto}
+.sugg .crest{--s:28px}
+.msg{margin-top:8px;min-height:20px;text-align:center;font-weight:600;font-size:14px}
+.msg.bad{color:var(--bad)} .msg.ok{color:var(--acc)} .msg.botc{color:var(--bot)}
+#body{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.ready{width:132px;height:132px;border-radius:50%;background:var(--acc);color:#0b1a05;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:32px;letter-spacing:.04em;
+ box-shadow:0 0 0 8px rgba(198,241,53,.15),0 0 0 18px rgba(198,241,53,.07);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;flex:none}
+.ready small{font-size:18px;opacity:.7;margin-top:2px}
+.ready.s{width:92px;height:92px;font-size:24px}
+.ready:active{transform:scale(.96)}
+.res{font-size:30px;line-height:1;text-align:center}
+.res.me{color:var(--me)} .res.bot{color:var(--bot)} .res.no{color:var(--mut)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.pc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px;min-width:0}
+.pc.hit{border-color:var(--acc)}
+.pc b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc div{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);margin-top:3px;white-space:nowrap;overflow:hidden}
+.cards{overflow-y:auto;min-height:0;flex:0 1 auto}
+.cards.many .pc{padding:5px 8px}.cards.many .pc b{font-size:13px}.cards.many .pc div{font-size:11px;margin-top:1px}
+.ready.xs{width:72px;height:72px;font-size:19px;box-shadow:0 0 0 6px rgba(198,241,53,.15),0 0 0 12px rgba(198,241,53,.07)}.ready.xs small{font-size:14px}
+.nxt{font-size:13px;color:var(--acc);font-weight:600;text-align:center}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.tiles div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
+.tiles b{display:block;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:28px;line-height:1;color:var(--acc)}
+.tiles span{font-size:11px;color:var(--mut)}
+#shist{flex:1;min-height:0;overflow-y:auto;margin:10px 0;display:flex;flex-direction:column;gap:6px}
+.hr{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.hr i{font-style:normal;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:20px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#08130f;flex:none}
+.hr i.w{background:var(--me)}.hr i.l{background:var(--bot)}
+.hr div{flex:1;min-width:0}.hr div b{display:block;font-size:14px}.hr div span{font-size:12px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hr em{font-style:normal;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px}
+.xp.off{display:none}
+.ph{text-align:center}.ph b{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:26px;text-transform:uppercase}.ph span{color:var(--mut);font-size:13px;display:block}
+.big2{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:64px;letter-spacing:.12em;text-align:center;color:var(--acc);line-height:1}
+.note{font-size:13px;color:var(--mut);text-align:center}
+.row2{display:flex;gap:8px}.row2 .q{flex:1;text-transform:uppercase}.row2 .btn{width:auto;padding:13px 18px}
+.ready.off{opacity:.45}
+#langpick{position:fixed;inset:0;z-index:9;background:radial-gradient(120% 60% at 50% 0%,#143326 0%,var(--bg) 60%);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px}
+#langpick.on{display:flex}
+#langpick h1{font-size:26px;color:var(--mut);margin-bottom:10px;text-align:center}
+#langpick button{width:100%;max-width:340px;padding:22px;border-radius:18px;background:var(--panel);border:2px solid var(--line);font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:38px;text-transform:uppercase;letter-spacing:.04em}
+#langpick button:active{border-color:var(--acc);color:var(--acc)}
+.more{font-size:12px;color:var(--mut);text-align:center}
+.endbtns{display:flex;gap:8px;width:100%}
+/* concept */
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.modes button{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px;text-align:left}
+.modes button.on{border-color:var(--acc);background:#16301f}
+.modes b{display:block;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:20px;text-transform:uppercase}
+.modes small{color:var(--mut);font-size:12px;line-height:1.25;display:block;margin-top:2px}
+.lgs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:12px}
+.lgs button{display:flex;align-items:center;gap:6px;padding:9px 8px;border-radius:10px;background:#0a1813;border:1px solid var(--line);font-weight:600;font-size:13px;min-width:0;white-space:nowrap;overflow:hidden}
+.lgs button.on{background:var(--acc);color:#0b1a05;border-color:var(--acc)}
+.lgs.off{opacity:.3;pointer-events:none}
+.lgs span{font-size:18px}
+#chint{margin-top:12px;text-align:center;font-size:14px;min-height:38px}
+.xp{display:flex;gap:10px;margin-top:12px}
+.xp button{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:14px;background:var(--panel);border:2px solid var(--line);min-width:0}
+.xp button.on{border-color:var(--acc)}
+.xp button span.n{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#xout{flex:1;min-height:0;overflow-y:auto;margin-top:10px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+.xh{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;text-align:center}
+.xh b{color:var(--acc)}
+</style>
+</head>
+<body>
+<div id="langpick"><h1>Dil · Language · Langue</h1><button data-l="tr">Türkçe</button><button data-l="en">English</button><button data-l="fr">Français</button></div>
+<div id="app">
+
+<section class="scr on" id="home">
+  <div class="toprow"><button class="pill" id="toS" data-t="stats"></button><div class="lang"><button data-l="tr">TR</button><button data-l="en">EN</button><button data-l="fr">FR</button></div></div>
+  <div class="logo"><h1 id="ttl"></h1><p data-t="tag"></p></div>
+  <div class="menu">
+    <div class="card">
+      <h2 data-t="vsBot"></h2>
+      <small data-t="vsBotSub"></small>
+      <button class="crow rowbtn" id="toC"><span><span class="l" data-t="concept"></span><b id="cname"></b></span><span class="go">›</span></button>
+      <div class="seg" id="diff">
+        <button data-d="easy" data-t="easy"></button><button data-d="mid" data-t="mid"></button><button data-d="hard" data-t="hard"></button>
+      </div>
+      <button class="btn" id="play" data-t="play"></button>
+    </div>
+    <button class="card rowbtn" id="toX">
+      <span><h2 data-t="bridge"></h2><small data-t="bridgeSub"></small></span><span class="go">›</span>
+    </button>
+    <button class="btn ghost" id="toO" data-t="online"></button>
+    <div class="foot" id="stat"></div>
+  </div>
+</section>
+
+<section class="scr" id="concept">
+  <div class="top"><button class="back" data-home>‹</button><h2 style="font-size:28px" data-t="concept"></h2></div>
+  <div class="modes" id="modes"></div>
+  <div class="lgs" id="lgs"></div>
+  <div id="chint" class="mut"></div>
+  <button class="btn" id="cok" style="margin-top:auto" data-t="ok"></button>
+</section>
+
+<section class="scr" id="online">
+  <div class="top"><button class="back" data-home>‹</button><h2 style="font-size:28px" data-t="online"></h2></div>
+  <div id="obody" style="flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
+</section>
+
+<section class="scr" id="statscr">
+  <div class="top"><button class="back" data-home>‹</button><h2 style="font-size:28px" data-t="stats"></h2></div>
+  <div class="seg" id="stabs" style="margin-bottom:0"><button data-s="bot">Bot</button><button data-s="on">Online</button></div>
+  <div class="tiles" id="tiles"></div>
+  <div id="shist"></div>
+  <button class="btn ghost" id="sreset"></button>
+</section>
+
+<section class="scr" id="game">
+  <div class="top">
+    <button class="back" data-home>‹</button>
+    <div class="score">
+      <div class="side me"><span class="nm" data-t="you"></span><div class="pips" id="pm"></div><div class="warn" id="wm"></div></div>
+      <span class="vs">VS</span>
+      <div class="side bot"><span class="nm" id="botnm">BOT</span><div class="pips" id="pb"></div><div class="warn" id="wo"></div></div>
+    </div>
+    <button class="back" id="snd" style="font-size:15px"></button>
+  </div>
+  <div id="head"></div>
+  <div id="inp">
+    <input id="q" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+    <div class="sugg" id="sg"></div>
+    <div class="msg" id="msg"></div>
+  </div>
+  <div id="body"></div>
+</section>
+
+<section class="scr" id="xplore">
+  <div class="top"><button class="back" data-home>‹</button><h2 style="font-size:28px" data-t="bridge"></h2></div>
+  <div class="seg" id="xtabs" style="margin-bottom:0"><button data-x="teams" data-t="tabTeams"></button><button data-x="player" data-t="tabPlayer"></button></div>
+  <div class="xp" id="xp"><button id="xa" class="on"></button><button id="xb"></button></div>
+  <div style="margin-top:10px">
+    <input class="q" id="xq" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div class="sugg" id="xsg"></div>
+  </div>
+  <div id="xout"></div>
+</section>
+
+</div>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script>
+/* ---------- dil ---------- */
+const S={tr:{
+ ttl:'Çift<br><b>Forma</b>',tag:'İki takım seç. İkisinde de forma giymiş<br>oyuncuyu rakibinden önce bul.',
+ vsBot:'Bota karşı',vsBotSub:'İnternetsiz · 3 puana ilk ulaşan kazanır',concept:'Konsept',easy:'Kolay',mid:'Orta',hard:'Zor',play:'Oyna',
+ bridge:'Forma Arşivi',bridgeSub:'İki takımın ortak oyuncuları ya da bir oyuncunun tüm takımları',stats:'İstatistik',tabTeams:'İki takım',tabPlayer:'Oyuncu',xpEmpty:'Bir oyuncu adı yaz, forma giydiği takımları gör.',sPlayed:'Maç',sWon:'Galibiyet',sRate:'Oran',sStreak:'En iyi seri',sLost:'Mağlubiyet',sEmpty:'Henüz maç yok. İlk maçını oyna.',sReset:'İstatistikleri sıfırla',sSure:'Emin misin? Silmek için tekrar dokun',wAny:'istediğin kulübü',wNat:'milli takım',wClub:'kulüp',wLg:x=>`${x} takımı`,now:x=>`Bu tur: ${x} seç`,next:x=>`Sıradaki tur: ${x} seç`,online:'Online düello',oMail:'E-posta adresin',oMailD:'Oturum açmak yok. E-postan istatistiklerini bulmak için kullanılır; adresin kaydedilir ve oyunla ilgili sana ulaşabiliriz.',oGo:'Devam',oHi:x=>`Oyuncu: ${x}`,oChange:'E-postayı değiştir',oNew:'Oda kur',oNewD:x=>`Konsept: ${x}`,oJoin:'Katıl',oCode:'Oda kodu',oRand:'Rastgele rakip',oWait:'Rakip bekleniyor…',oSearch:'Rakip aranıyor…',oShare:'Bu kodu arkadaşına gönder',oCopy:'Bağlantıyı kopyala',oCopied:'Kopyalandı',oCancel:'Vazgeç',oNoRoom:'Oda bulunamadı ya da dolu.',oBadMail:'Geçerli bir e-posta yaz.',oErr:'Bağlantı kurulamadı.',oMock:'Deneme modu: sunucu ayarlı değil, yalnızca bu tarayıcının sekmeleri arasında çalışır.',oOppReady:'Rakip hazır',oOppWait:'Rakip bekleniyor',oYouReady:'Hazırsın · rakip bekleniyor',oOppWrong:x=>`${x} yanlış bildi · fırsat sende`,oOppGot:x=>`${x} bildi`,oOppNoPick:x=>`${x} takım seçmedi · tur geçersiz`,oOppPen:x=>`${x} 3. uyarıyı aldı · sana +1 puan`,oMyPen:'3. uyarı · ceza: rakibe +1 puan',oSame:'Aynı takım seçildi · tur geçersiz',oOppWin:x=>`${x} kazandı`,oRematch:'Rövanş',oGone:'Rakip ayrıldı',oOff:'çevrimdışı',oNoStats:'Online maç yok.',oNeedMail:'Online istatistik için önce Online düello ekranında e-postanı yaz.',ok:'Tamam',you:'SEN',bot:'BOT',
+ stat:(c,n,p)=>`1990 sonrası · ${c} kulüp · ${n} milli takım · ${p} oyuncu`,
+ mAll:'Tüm kulüpler',natTeam:'Milli takım',mAllD:'9 ligden istediğin kulüp',mOne:'Tek lig',mOneD:'İki taraf da aynı ligden seçer',mTwo:'Lig × Lig',mTwoD:'Biri bir ligden, diğeri öbüründen · her tur değişir',mNat:'Milli × Kulüp',mNatD:'Biri milli takım, diğeri kulüp · her tur değişir',
+ hAll:'Dokuz ligin bütün kulüpleri açık.',hOne:'Bir lig seç.',hTwo:'İki lig seç.',hNat:'Bir tur sen milli takım seçersin, sonraki tur bot.',
+ intro:'Hazır olunca 3-2-1 başlar.<br>Geri sayım bitmeden takımını seç.',ready:'HAZIR',
+ phTeam:'Takım adı yaz…',phPlayer:'Oyuncu adı yaz…',pickAny:'Takımını seç',pickFrom:x=>`Bu tur: ${x} takımı seç`,pickNat:'Bu tur: milli takım seç',pickClub:'Bu tur: kulüp seç',
+ picked:x=>`${x} seçildi`,match:'EŞLEŞME',noMatch:'EŞLEŞME YOK',noCommon:'Bu iki takımda ortak oyuncu yok',guess:'İki takımda da oynamış bir oyuncu yaz',
+ botWrong:x=>`Bot yanlış bildi${x?': '+x:''} · fırsat sende`,meWrong:x=>`${x} yanlış · bu tur dışındasın`,
+ noPick:'Takım seçmedin · tur geçersiz',penalty:'3. uyarı · ceza: bota +1 puan',warn:n=>`Uyarı ${n}/3`,
+ win:'Bildin! +1',lose:'Bot bildi',none:'Bilen çıkmadı',gWin:'Maçı kazandın!',gLose:'Bot kazandı',again:'Tekrar oyna',menu:'Ana menü',
+ more:n=>`+${n} oyuncu daha · Forma Arşivi'nde hepsini gör`,caps:'maç',t1:'1. takım',t2:'2. takım',
+ xEmpty:'İki takım seçince ortak oyuncular burada listelenir.',xSame:'İki farklı takım seç.',xN:n=>`<b>${n}</b> eşleşme`,xMore:n=>`İlk 80 oyuncu gösteriliyor (toplam ${n}).`,
+ lv:{easy:'KOLAY',mid:'ORTA',hard:'ZOR'},err:'Veri yüklenemedi.'
+},en:{
+ ttl:'Two<br><b>Shirts</b>',tag:'Pick two teams. Name a player who wore<br>both shirts before your rival does.',
+ vsBot:'Vs bot',vsBotSub:'Offline · first to 3 points wins',concept:'Concept',easy:'Easy',mid:'Medium',hard:'Hard',play:'Play',
+ bridge:'Kit Archive',bridgeSub:'Players two teams share, or every team of one player',stats:'Stats',tabTeams:'Two teams',tabPlayer:'Player',xpEmpty:'Type a player to see every team he played for.',sPlayed:'Played',sWon:'Wins',sRate:'Win rate',sStreak:'Best streak',sLost:'Losses',sEmpty:'No matches yet. Play your first one.',sReset:'Reset stats',sSure:'Are you sure? Tap again to delete',wAny:'any club',wNat:'a national team',wClub:'a club',wLg:x=>`a team from ${x}`,now:x=>`This round: pick ${x}`,next:x=>`Next round: pick ${x}`,online:'Online duel',oMail:'Your email',oMailD:'No sign-in. Your email is used to find your stats; it is stored and we may contact you about the game.',oGo:'Continue',oHi:x=>`Player: ${x}`,oChange:'Change email',oNew:'Create room',oNewD:x=>`Concept: ${x}`,oJoin:'Join',oCode:'Room code',oRand:'Random rival',oWait:'Waiting for rival…',oSearch:'Looking for a rival…',oShare:'Send this code to your friend',oCopy:'Copy link',oCopied:'Copied',oCancel:'Cancel',oNoRoom:'Room not found or full.',oBadMail:'Enter a valid email.',oErr:'Could not connect.',oMock:'Trial mode: no server configured, works only between tabs of this browser.',oOppReady:'Rival is ready',oOppWait:'Waiting for rival',oYouReady:'You are ready · waiting for rival',oOppWrong:x=>`${x} got it wrong · your chance`,oOppGot:x=>`${x} got it`,oOppNoPick:x=>`${x} did not pick · round void`,oOppPen:x=>`${x} got a 3rd warning · +1 to you`,oMyPen:'3rd warning · penalty: +1 to your rival',oSame:'Same team picked · round void',oOppWin:x=>`${x} wins`,oRematch:'Rematch',oGone:'Rival left',oOff:'offline',oNoStats:'No online matches yet.',oNeedMail:'Enter your email on the Online duel screen first to see online stats.',ok:'Done',you:'YOU',bot:'BOT',
+ stat:(c,n,p)=>`Since 1990 · ${c} clubs · ${n} national teams · ${p} players`,
+ mAll:'All clubs',natTeam:'National team',mAllD:'Any club from 9 leagues',mOne:'One league',mOneD:'Both sides pick from the same league',mTwo:'League × League',mTwoD:'One league each · sides swap every round',mNat:'Nation × Club',mNatD:'One national team, one club · swaps every round',
+ hAll:'Every club from all nine leagues.',hOne:'Pick a league.',hTwo:'Pick two leagues.',hNat:'You pick a national team one round, the bot the next.',
+ intro:'3-2-1 starts when you are ready.<br>Pick your team before it ends.',ready:'READY',
+ phTeam:'Type a team…',phPlayer:'Type a player…',pickAny:'Pick your team',pickFrom:x=>`This round: pick a team from ${x}`,pickNat:'This round: pick a national team',pickClub:'This round: pick a club',
+ picked:x=>`${x} selected`,match:'MATCHES',noMatch:'NO MATCH',noCommon:'No player has played for both',guess:'Name a player who played for both',
+ botWrong:x=>`Bot got it wrong${x?': '+x:''} · your chance`,meWrong:x=>`${x} is wrong · you are out this round`,
+ noPick:'No team picked · round void',penalty:'3rd warning · penalty: +1 to the bot',warn:n=>`Warning ${n}/3`,
+ win:'Correct! +1',lose:'Bot got it',none:'Nobody got it',gWin:'You win the match!',gLose:'Bot wins',again:'Play again',menu:'Main menu',
+ more:n=>`+${n} more · see them all in Kit Archive`,caps:'caps',t1:'Team 1',t2:'Team 2',
+ xEmpty:'Pick two teams to list the players they share.',xSame:'Pick two different teams.',xN:n=>`<b>${n}</b> matches`,xMore:n=>`Showing the first 80 of ${n}.`,
+ lv:{easy:'EASY',mid:'MEDIUM',hard:'HARD'},err:'Data failed to load.'
+},fr:{
+ ttl:'Deux<br><b>Maillots</b>',tag:'Choisis deux équipes. Trouve avant ton rival<br>un joueur qui a porté les deux maillots.',
+ vsBot:'Contre le bot',vsBotSub:'Hors ligne · le premier à 3 points gagne',concept:'Concept',easy:'Facile',mid:'Moyen',hard:'Difficile',play:'Jouer',
+ bridge:'Archives des maillots',bridgeSub:'Les joueurs communs à deux équipes, ou toutes les équipes d’un joueur',stats:'Stats',tabTeams:'Deux équipes',tabPlayer:'Joueur',xpEmpty:'Écris le nom d’un joueur pour voir toutes ses équipes.',sPlayed:'Matchs',sWon:'Victoires',sRate:'Taux',sStreak:'Meilleure série',sLost:'Défaites',sEmpty:'Aucun match pour l’instant. Joue le premier.',sReset:'Réinitialiser les stats',sSure:'Sûr ? Touche encore pour supprimer',wAny:'le club de ton choix',wNat:'une sélection nationale',wClub:'un club',wLg:x=>`une équipe — ${x}`,now:x=>`Ce tour : choisis ${x}`,next:x=>`Tour suivant : choisis ${x}`,online:'Duel en ligne',oMail:'Ton e-mail',oMailD:'Pas de connexion. Ton e-mail sert à retrouver tes stats ; il est enregistré et nous pouvons te contacter au sujet du jeu.',oGo:'Continuer',oHi:x=>`Joueur : ${x}`,oChange:'Changer d’e-mail',oNew:'Créer une salle',oNewD:x=>`Concept : ${x}`,oJoin:'Rejoindre',oCode:'Code de la salle',oRand:'Rival aléatoire',oWait:'En attente du rival…',oSearch:'Recherche d’un rival…',oShare:'Envoie ce code à ton ami',oCopy:'Copier le lien',oCopied:'Copié',oCancel:'Annuler',oNoRoom:'Salle introuvable ou complète.',oBadMail:'Écris un e-mail valide.',oErr:'Connexion impossible.',oMock:'Mode essai : aucun serveur configuré, fonctionne seulement entre les onglets de ce navigateur.',oOppReady:'Ton rival est prêt',oOppWait:'En attente du rival',oYouReady:'Tu es prêt · en attente du rival',oOppWrong:x=>`${x} s’est trompé · à toi`,oOppGot:x=>`${x} a trouvé`,oOppNoPick:x=>`${x} n’a pas choisi · tour annulé`,oOppPen:x=>`3e avertissement pour ${x} · +1 pour toi`,oMyPen:'3e avertissement · pénalité : +1 pour ton rival',oSame:'Même équipe choisie · tour annulé',oOppWin:x=>`${x} gagne`,oRematch:'Revanche',oGone:'Ton rival est parti',oOff:'hors ligne',oNoStats:'Aucun match en ligne.',oNeedMail:'Écris d’abord ton e-mail dans l’écran Duel en ligne pour voir tes stats en ligne.',ok:'OK',you:'TOI',bot:'BOT',
+ stat:(c,n,p)=>`Depuis 1990 · ${c} clubs · ${n} sélections · ${p} joueurs`,
+ mAll:'Tous les clubs',natTeam:'Sélection nationale',mAllD:'N’importe quel club de 9 championnats',mOne:'Un championnat',mOneD:'Les deux choisissent dans le même championnat',mTwo:'Ligue × Ligue',mTwoD:'Un championnat chacun · on échange à chaque tour',mNat:'Sélection × Club',mNatD:'Une sélection, un club · on échange à chaque tour',
+ hAll:'Tous les clubs des neuf championnats.',hOne:'Choisis un championnat.',hTwo:'Choisis deux championnats.',hNat:'Un tour tu choisis une sélection, le tour suivant c’est ton rival.',
+ intro:'Le 3-2-1 démarre quand tu es prêt.<br>Choisis ton équipe avant la fin.',ready:'PRÊT',
+ phTeam:'Écris une équipe…',phPlayer:'Écris un joueur…',pickAny:'Choisis ton équipe',
+ picked:x=>`${x} sélectionné`,match:'EN COMMUN',noMatch:'AUCUN EN COMMUN',noCommon:'Aucun joueur n’a joué pour les deux',guess:'Écris un joueur qui a joué pour les deux',
+ botWrong:x=>`Le bot s’est trompé${x?' : '+x:''} · à toi`,meWrong:x=>`${x} : faux · tu es hors-jeu pour ce tour`,
+ noPick:'Aucune équipe choisie · tour annulé',penalty:'3e avertissement · pénalité : +1 pour le bot',warn:n=>`Avertissement ${n}/3`,
+ win:'Bien joué ! +1',lose:'Le bot a trouvé',none:'Personne n’a trouvé',gWin:'Tu gagnes le match !',gLose:'Le bot gagne',again:'Rejouer',menu:'Menu principal',
+ more:n=>`+${n} autres`,caps:'sél.',t1:'Équipe 1',t2:'Équipe 2',
+ xEmpty:'Choisis deux équipes pour voir leurs joueurs communs.',xSame:'Choisis deux équipes différentes.',xN:n=>`<b>${n}</b> en commun`,xMore:n=>`Les 80 premiers sur ${n}.`,
+ lv:{easy:'FACILE',mid:'MOYEN',hard:'DIFFICILE'},err:'Chargement des données impossible.'
+}};
+const store={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const NAVL=(navigator.language||'tr').toLowerCase(),FIRST=!store.get('cf-lang','');
+let L=store.get('cf-lang',NAVL.startsWith('tr')?'tr':NAVL.startsWith('fr')?'fr':'en');if(!S[L])L='en';
+const LOC={tr:'tr-TR',en:'en-GB',fr:'fr-FR'},WL={tr:['G','M'],en:['W','L'],fr:['V','D']};
+const t=(k,...a)=>{const v=S[L][k];return typeof v==='function'?v(...a):v};
+const $=id=>document.getElementById(id);
+
+/* ---------- veri ---------- */
+const LGS=[['TR','Türkiye','Türkiye','Turquie'],['ENG','İngiltere','England','Angleterre'],['ES','İspanya','Spain','Espagne'],['IT','İtalya','Italy','Italie'],['DE','Almanya','Germany','Allemagne'],['FR','Fransa','France','France'],['PT','Portekiz','Portugal','Portugal'],['NL','Hollanda','Netherlands','Pays-Bas'],['BE','Belçika','Belgium','Belgique']];
+const FRN={TR:'Turquie',DE:'Allemagne',ENG:'Angleterre',FR:'France',ES:'Espagne',IT:'Italie',PT:'Portugal',NL:'Pays-Bas',BR:'Brésil',AR:'Argentine',BE:'Belgique',HR:'Croatie',RS:'Serbie',SN:'Sénégal',NG:'Nigeria',CM:'Cameroun',GH:'Ghana',CI:'Côte d’Ivoire',MA:'Maroc',DZ:'Algérie',TN:'Tunisie',EG:'Égypte',ML:'Mali',UY:'Uruguay',CO:'Colombie',CL:'Chili',PY:'Paraguay',MX:'Mexique',US:'États-Unis',DK:'Danemark',SE:'Suède',NO:'Norvège',CH:'Suisse',AT:'Autriche',PL:'Pologne',CZ:'Tchéquie',SK:'Slovaquie',SI:'Slovénie',BA:'Bosnie-Herzégovine',GR:'Grèce',RO:'Roumanie',BG:'Bulgarie',HU:'Hongrie',UA:'Ukraine',RU:'Russie',SCO:'Écosse',WAL:'Pays de Galles',IE:'Irlande',NIR:'Irlande du Nord',IS:'Islande',FI:'Finlande',AL:'Albanie',XK:'Kosovo',MK:'Macédoine du Nord',ME:'Monténégro',JP:'Japon',KR:'Corée du Sud',AU:'Australie',IR:'Iran',IL:'Israël',GE:'Géorgie',AZ:'Azerbaïdjan',CA:'Canada',EC:'Équateur',PE:'Pérou',VE:'Venezuela',GN:'Guinée',CD:'RD Congo',CV:'Cap-Vert',AO:'Angola',BF:'Burkina Faso',GA:'Gabon',TG:'Togo',ZA:'Afrique du Sud',JM:'Jamaïque',CR:'Costa Rica',GW:'Guinée-Bissau',MZ:'Mozambique',GM:'Gambie',ZM:'Zambie',CG:'Congo',BJ:'Bénin',AM:'Arménie',BY:'Biélorussie',LT:'Lituanie',LV:'Lettonie',EE:'Estonie',LU:'Luxembourg',CY:'Chypre',HN:'Honduras',NZ:'Nouvelle-Zélande',CN:'Chine',SA:'Arabie saoudite',SR:'Suriname',CW:'Curaçao',ZW:'Zimbabwe',KE:'Kenya',UZ:'Ouzbékistan',HT:'Haïti',TT:'Trinité-et-Tobago',GQ:'Guinée équatoriale',KM:'Comores',MG:'Madagascar',MR:'Mauritanie',LY:'Libye',SL:'Sierra Leone',LR:'Liberia',MD:'Moldavie',KZ:'Kazakhstan',IQ:'Irak',SY:'Syrie',PA:'Panama',BO:'Bolivie'};
+const norm=s=>s.toLocaleLowerCase('tr').replace(/ı/g,'i').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ø/g,'o').replace(/ß/g,'ss').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+const tagFlag=s=>'\u{1F3F4}'+[...s].map(c=>String.fromCodePoint(0xE0000+c.charCodeAt(0))).join('')+'\u{E007F}';
+const flag=c=>c==='ENG'?tagFlag('gbeng'):c==='SCO'?tagFlag('gbsct'):c==='WAL'?tagFlag('gbwls'):c.length===2?String.fromCodePoint(...[...c].map(x=>0x1F1A5+x.charCodeAt(0))):c;
+const DBok=!!window.DB;
+const T=(DBok?DB.T:[]).map((r,i)=>{const nat=r[1]<0;return{i,tr:r[0],en:nat?r[4]:r[0].replace('Münih','Munich').replace('(eski)','(old)'),fr:nat?(FRN[r[2]]||r[4]):r[0].replace('Münih','Munich').replace('(eski)','(ancien)'),lg:r[1],nat,sh:nat?flag(r[2]):r[2],col:nat?null:r[3].split(','),k:norm(r[0]+' '+r[4]),w:0,p:nat?99:(r[5]||0)}});
+const tn=i=>T[i][L];
+const PL=(DBok?DB.P.split('\n'):[]).map((l,i)=>{const a=l.split('|'),c={};for(let j=2;j<a.length;j++){const e=a[j].indexOf('=');c[a[j].slice(0,e)]=a[j].slice(e+1)}return{i,n:a[0],y:a[1],c,k:norm(a[0])}});
+PL.forEach(p=>{for(const k in p.c)T[k].w++});
+const common=(a,b)=>PL.filter(p=>p.c[a]&&p.c[b]);
+const crest=(i,cls='')=>i==null?`<span class="crest empty ${cls}">?</span>`:T[i].nat?`<span class="crest nat ${cls}">${T[i].sh}</span>`:`<span class="crest ${cls}" style="--a:#${T[i].col[0]};--b:#${T[i].col[1]}">${T[i].sh}</span>`;
+function rank(list,q,max){
+  const k=norm(q); if(!k) return [];
+  const out=[[],[],[]];
+  for(const x of list){const i=x.k.indexOf(k); if(i<0) continue; out[i===0||x.k[i-1]===' '?1:2].push(x)}
+  const res=out[0].concat(out[1],out[2]).slice(0,max);
+  if(res.length<max&&k.length>=4){ // yazım toleransı: her kelimede 1 (uzun kelimede 2) harf hatası
+    const qs=k.split(' ').filter(w=>w.length>=2),have=new Set(res);
+    for(const x of list){
+      if(have.has(x))continue;
+      const ws=x.ws||(x.ws=x.k.split(' '));
+      if(qs.every(q=>ws.some(w=>near(q,w)))){res.push(x);if(res.length>=max)break}
+    }
+  }
+  return res;
+}
+function lev(a,b,m){
+  if(Math.abs(a.length-b.length)>m)return m+1;
+  let prev=Array.from({length:b.length+1},(_,i)=>i);
+  for(let i=1;i<=a.length;i++){const cur=[i];let lo=i;
+    for(let j=1;j<=b.length;j++){const v=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));cur[j]=v;if(v<lo)lo=v}
+    if(lo>m)return m+1;prev=cur}
+  return prev[b.length];
+}
+function near(q,w){
+  const m=q.length>=8?2:q.length>=4?1:0;
+  if(!m)return w.startsWith(q);
+  if(q[0]!==w[0])return false;
+  for(let d=-1;d<=1;d++){const L=q.length+d;if(L<2)continue;if(lev(q,w.slice(0,L),m)<=m)return true}
+  return false;
+}
+const esc=x=>String(x).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const span=(p,x)=>p.c[x][0]==='#'?`${p.c[x].slice(1)} ${t('caps')}`:p.c[x];
+const pcard=(p,a,b,hit)=>`<div class="pc ${hit?'hit':''}"><b>${p.n}</b><div>${crest(a,'sm')}${span(p,a)}</div><div>${crest(b,'sm')}${span(p,b)}</div></div>`;
+
+/* ---------- genel ---------- */
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id))}
+let diff=store.get('cf-diff','easy');
+let CON={m:'all',l:[0,1]};
+try{const c=JSON.parse(store.get('cf-con',''));if(c&&c.m&&Array.isArray(c.l))CON=c}catch(e){}
+const lgName=i=>LGS[i][{tr:1,en:2,fr:3}[L]];
+function conName(c=CON){return c.m==='all'?t('mAll'):c.m==='one'?`${flag(LGS[c.l[0]][0])} ${lgName(c.l[0])}`:c.m==='two'?`${flag(LGS[c.l[0]][0])} ${lgName(c.l[0])} × ${flag(LGS[c.l[1]][0])} ${lgName(c.l[1])}`:t('mNat')}
+function paintAll(){
+  document.documentElement.lang=L;
+  document.querySelectorAll('[data-t]').forEach(e=>e.innerHTML=t(e.dataset.t));
+  $('ttl').innerHTML=t('ttl');
+  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+  document.querySelectorAll('#diff button').forEach(b=>b.classList.toggle('on',b.dataset.d===diff));
+  $('cname').textContent=conName();
+  $('stat').textContent=DBok?t('stat',T.filter(x=>!x.nat).length,T.filter(x=>x.nat).length,PL.length.toLocaleString(LOC[L])):t('err');
+  $('xq').placeholder=t('phTeam');
+  $('play').disabled=!DBok;$('toO').disabled=!DBok;
+}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{L=b.dataset.l;store.set('cf-lang',L);paintAll()});
+if(FIRST)$('langpick').classList.add('on');
+document.querySelectorAll('#langpick button').forEach(b=>b.onclick=()=>{L=b.dataset.l;store.set('cf-lang',L);$('langpick').classList.remove('on');paintAll()});
+document.querySelectorAll('#diff button').forEach(b=>b.onclick=()=>{diff=b.dataset.d;store.set('cf-diff',diff);paintAll()});
+document.querySelectorAll('[data-home]').forEach(b=>b.onclick=()=>{stopAll();ON.leave();G=null;paintAll();show('home')});
+
+/* ---------- konsept ---------- */
+function paintCon(){
+  $('modes').innerHTML=[['all','mAll'],['one','mOne'],['two','mTwo'],['nat','mNat']].map(([m,k])=>`<button data-m="${m}" class="${CON.m===m?'on':''}"><b>${t(k)}</b><small>${t(k+'D')}</small></button>`).join('');
+  const need=CON.m==='one'?1:CON.m==='two'?2:0;
+  $('lgs').className='lgs'+(need?'':' off');
+  $('lgs').innerHTML=LGS.map((l,i)=>`<button data-i="${i}" class="${need&&CON.l.slice(0,need).includes(i)?'on':''}"><span>${flag(l[0])}</span>${lgName(i)}</button>`).join('');
+  $('chint').textContent=t({all:'hAll',one:'hOne',two:'hTwo',nat:'hNat'}[CON.m]);
+}
+$('toC').onclick=()=>{paintCon();show('concept')};
+$('modes').onclick=e=>{const b=e.target.closest('button');if(!b)return;CON.m=b.dataset.m;paintCon()};
+$('lgs').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;
+  if(CON.m==='one')CON.l=[i,CON.l[0]===i?CON.l[1]:CON.l[0]];
+  else if(!CON.l.includes(i))CON.l=[CON.l[1],i];
+  paintCon()};
+$('cok').onclick=()=>{store.set('cf-con',JSON.stringify(CON));paintAll();show('home')};
+const TW=T.slice().sort((a,b)=>(b.p>0)-(a.p>0)||b.w-a.w),CLUBS=TW.filter(x=>!x.nat),NATS=TW.filter(x=>x.nat);
+const lgLine=i=>T[i].nat?t('natTeam'):`${flag(LGS[T[i].lg][0])} ${lgName(T[i].lg)}`;
+function pools(round){ // [benim havuzum, botun havuzu, benim etiketim]
+  const sw=round%2===0;
+  if(CON.m==='one'){const p=CLUBS.filter(x=>x.lg===CON.l[0]);return[p,p,t('wLg',lgName(CON.l[0]))]}
+  if(CON.m==='two'){const a=CON.l[sw?1:0],b=CON.l[sw?0:1];return[CLUBS.filter(x=>x.lg===a),CLUBS.filter(x=>x.lg===b),t('wLg',lgName(a))]}
+  if(CON.m==='nat')return sw?[CLUBS,NATS,t('wClub')]:[NATS,CLUBS,t('wNat')];
+  return[CLUBS,CLUBS,t('wAny')];
+}
+
+/* ---------- SES ve TİTREŞİM ---------- */
+let SND=store.get('cf-snd','1')==='1',AC=null;
+function audio(){try{if(!AC){const A=window.AudioContext||window.webkitAudioContext;if(A)AC=new A()}if(AC&&AC.state==='suspended')AC.resume()}catch(e){}}
+function tone(f,d,type='sine',when=0,g=.13){
+  if(!SND||!AC)return;
+  try{const o=AC.createOscillator(),v=AC.createGain(),t=AC.currentTime+when;o.type=type;o.frequency.value=f;
+    v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(v);v.connect(AC.destination);o.start(t);o.stop(t+d+.02)}catch(e){}
+}
+function buzz(p){if(SND&&navigator.vibrate){try{navigator.vibrate(p)}catch(e){}}}
+const FX={
+  tick(){tone(660,.09,'square',0,.07);buzz(15)},
+  go(){tone(990,.18,'square',0,.09);buzz(40)},
+  soft(){tone(880,.05,'sine',0,.06)},
+  win(){[523,659,784,1047].forEach((f,i)=>tone(f,.16,'triangle',i*.09));buzz([40,40,90])},
+  lose(){[440,330,262].forEach((f,i)=>tone(f,.2,'sawtooth',i*.13,.08));buzz(200)},
+  bad(){tone(150,.3,'sawtooth',0,.1);buzz([60,50,60])},
+  none(){tone(300,.25,'sine',0,.08)},
+  match(w){(w?[523,659,784,1047,1319]:[392,330,262,196]).forEach((f,i)=>tone(f,.25,w?'triangle':'sawtooth',i*.14,.1));buzz(w?[60,40,60,40,160]:400)}
+};
+function paintSnd(){const b=$('snd');if(b)b.textContent=SND?'🔊':'🔇'}
+
+/* ---------- OYUN ---------- */
+const BOT={easy:{p:.45,t:[8,9.6],wrong:.5},mid:{p:.7,t:[5.5,7.5],wrong:.35},hard:{p:.9,t:[3.2,4.8],wrong:.3}};
+const TICK=2500, GUESS=10000, WAIT=10, WIN=3;
+let G=null, TM=[];
+const later=(f,ms)=>{const id=setTimeout(f,ms);TM.push(id);return id};
+function stopAll(){TM.forEach(clearTimeout);TM=[]}
+const q=$('q'),sg=$('sg'),msg=$('msg'),head=$('head'),body=$('body'),inp=$('inp');
+function setMsg(x,c=''){msg.textContent=x;msg.className='msg '+c}
+function pips(){
+  const f=n=>Array.from({length:WIN},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('');
+  $('pm').innerHTML=f(G.me);$('pb').innerHTML=f(G.bot);
+  $('wm').textContent=G.strikes?t('warn',G.strikes):'';
+  $('wo').textContent=G.online&&G.oppOff?t('oOff'):'';
+}
+$('snd').onclick=()=>{SND=!SND;store.set('cf-snd',SND?'1':'0');audio();paintSnd();FX.soft()};
+$('play').onclick=()=>{
+  audio();paintSnd();
+  G={b:BOT[diff],me:0,bot:0,strikes:0,round:0,phase:'ready'};
+  $('botnm').textContent=`${t('bot')} · ${t('lv')[diff]}`;show('game');pips();
+  inp.classList.remove('on');head.innerHTML=`<div class="mut">${t('intro')}</div><div class="nxt" style="margin-top:10px">${t('now',pools(1)[2])}</div>`;
+  body.innerHTML=`<button class="ready" id="rdy">${t('ready')}</button>`;$('rdy').onclick=startPick;
+};
+function botPick(pool,not){
+  // seçimine göre ortak oyuncu sayıları: kolay = en çok eşleşen bilindik takımlar, orta = daha geniş, zor = az bilinenler
+  const cnt={};for(const p of PL)if(p.c[not])for(const k in p.c)cnt[k]=(cnt[k]||0)+1;
+  const ok=pool.filter(c=>c.i!==not&&cnt[c.i]).sort((a,b)=>cnt[b.i]-cnt[a.i]);
+  const pick=a=>a[Math.floor(Math.random()*a.length)].i;
+  if(ok.length){
+    const big=ok.filter(c=>c.p>=5),known=ok.filter(c=>c.p>=1);
+    if(diff==='easy')return pick((big.length?big:ok).slice(0,6));
+    if(diff==='mid')return pick((known.length?known:ok).slice(0,25));
+    if(Math.random()<.85)return pick(ok.slice(Math.min(10,ok.length-1)));
+  }
+  const p=pool.filter(c=>c.i!==not&&c.w>0);return pick(p.length?p:pool);
+}
+function startPick(){
+  audio();stopAll();G.round++;G.phase='pick';G.pick=null;G.botPick=null;
+  [G.poolMe,G.poolBot,G.label]=pools(G.round);G.label=t('now',G.label);
+  body.innerHTML='';inp.classList.add('on');q.disabled=false;q.value='';q.placeholder=t('phTeam');sg.innerHTML='';setMsg(G.label);
+  q.focus();
+  [3,2,1].forEach((n,i)=>later(()=>{head.innerHTML=`<div class="d big pop">${n}</div>`;FX.tick()},i*TICK));
+  head.innerHTML='<div class="d big pop">3</div>';FX.tick();
+  later(resolvePick,3*TICK);
+}
+function paintSugg(){
+  if(!G) return;
+  if(G.phase==='pick'){
+    sg.innerHTML=rank(G.poolMe,q.value,4).map(c=>`<button data-id="${c.i}" class="${G.pick===c.i?'sel':''}">${crest(c.i)}${tn(c.i)}<i>${lgLine(c.i)}</i></button>`).join('');
+  }else if(G.phase==='guess'&&!G.meOut){
+    const r=norm(q.value).length>=2?rank(PL,q.value,5):[];
+    sg.innerHTML=r.map(p=>`<button data-p="${p.i}">${p.n}<i>${p.y}</i></button>`).join('');
+  }else sg.innerHTML='';
+}
+q.oninput=paintSugg;
+q.onkeydown=e=>{if(e.key==='Enter'){const b=sg.querySelector('button');if(b)b.click()}};
+sg.onmousedown=e=>e.preventDefault();
+sg.onclick=e=>{
+  const b=e.target.closest('button');if(!b||!G)return;
+  if(G.phase==='pick'){G.pick=+b.dataset.id;if(G.online)net.set(ON.path('p/'+ON.slot+'/pick'),G.pick);setMsg(t('picked',tn(G.pick)),'ok');paintSugg();q.focus()}
+  else if(G.phase==='guess'){answer(PL[+b.dataset.p]);q.focus()}
+};
+function duo(a,b,n,who){
+  return `<div class="duo"><div class="t">${crest(a)}<span class="n">${tn(a)}</span><span class="w">${lgLine(a)}${who?' · '+t('you'):''}</span></div>
+   <div class="mid"><b>${n}</b><small>${n?t('match'):t('noMatch')}</small></div>
+   <div class="t">${crest(b)}<span class="n">${tn(b)}</span><span class="w">${lgLine(b)}${who?' · '+esc(G&&G.online?G.opp:t('bot')):''}</span></div></div>`;
+}
+function resolvePick(){
+  if(G.pick==null){
+    G.strikes++;let x=t('noPick');
+    if(G.strikes>=3){G.strikes=0;G.bot++;x=t('penalty')}
+    FX.bad();return reveal(null,null,x);
+  }
+  G.botPick=botPick(G.poolBot,G.pick);G.m=common(G.pick,G.botPick);
+  const a=G.pick,b=G.botPick,n=G.m.length;
+  head.innerHTML=duo(a,b,n,true)+(n?'<div class="bar"><i></i></div>':'');
+  q.value='';sg.innerHTML='';
+  if(!n){FX.none();G.phase='nomatch';q.disabled=true;setMsg(t('noCommon'),'bad');return later(()=>reveal(null,null,t('noMatch')),2200)}
+  FX.go();[3,2,1].forEach(n=>later(FX.tick,GUESS-n*1000));G.phase='guess';G.meOut=false;G.botOut=false;q.placeholder=t('phPlayer');setMsg(t('guess'));q.focus();
+  const B=G.b,bt=(B.t[0]+Math.random()*(B.t[1]-B.t[0]))*1000;
+  if(Math.random()<B.p) later(()=>endRound('bot',G.m[Math.floor(Math.random()*Math.min(3,G.m.length))]),bt);
+  else if(Math.random()<B.wrong) later(()=>{
+    const pool=PL.filter(p=>(p.c[a]||p.c[b])&&!(p.c[a]&&p.c[b])).slice(0,40);const w=pool[Math.floor(Math.random()*pool.length)];
+    G.botOut=true;if(G.meOut)return endRound(null);
+    FX.soft();setMsg(t('botWrong',w?w.n:''),'botc');
+  },bt);
+  later(()=>endRound(null),GUESS);
+}
+function answer(p){
+  if(!G||G.phase!=='guess'||G.meOut)return;
+  if(G.online)return ON.answer(p);
+  if(p.c[G.pick]&&p.c[G.botPick])return endRound('me',p);
+  FX.bad();G.meOut=true;q.value='';q.disabled=true;sg.innerHTML='';setMsg(t('meWrong',p.n),'bad');
+  if(G.botOut){stopAll();later(()=>endRound(null),900)}
+}
+function endRound(w,p){
+  if(G.phase!=='guess')return;stopAll();
+  if(w==='me')G.me++;if(w==='bot')G.bot++;
+  const fin=G.me>=WIN||G.bot>=WIN;if(fin)FX.match(G.me>=WIN);else if(w==='me')FX.win();else if(w==='bot')FX.lose();else FX.none();
+  reveal(w,p,w==='me'?t('win'):w==='bot'?t('lose'):t('none'));
+}
+function reveal(w,p,title){
+  stopAll();G.phase='reveal';pips();inp.classList.remove('on');q.blur();
+  const a=G.pick,b=G.botPick,over=G.me>=WIN||G.bot>=WIN;
+  let cards='',more='',many=false;const cw=()=>`<div class="cards${many?' many':''}">${cards}</div>`;
+  if(a!=null&&b!=null){
+    const m=G.m,list=p?[p,...m.filter(x=>x!==p)]:m;
+    many=list.length>4;cards=list.map(x=>pcard(x,a,b,x===p)).join('');
+    head.innerHTML=duo(a,b,m.length,false);
+  }else head.innerHTML='';
+  const cls=w==='me'?'me':w==='bot'?'bot':'no';
+  if(over){
+    const win=G.me>=WIN;saveMatch(win);
+    body.innerHTML=`<div class="d res ${win?'me':'bot'}">${win?t('gWin'):t('gLose')}</div>${cards?cw():''}
+      <div class="endbtns"><button class="btn" id="again">${t('again')}</button><button class="btn ghost" id="hm">${t('menu')}</button></div>`;
+    $('again').onclick=()=>$('play').click();$('hm').onclick=()=>{G=null;show('home')};
+    return;
+  }
+  body.innerHTML=`<div class="d res ${cls}">${title}</div>${cards?cw()+more:''}
+    <div class="nxt">${t('next',pools(G.round+1)[2])}</div>
+    <button class="ready ${many?'xs':'s'}" id="rdy">${t('ready')}</button>`;
+  $('rdy').onclick=startPick; // bot modunda süre yok; online modda WAIT saniyelik sayaç kullanılacak
+}
+
+/* ---------- İSTATİSTİK ---------- */
+function hist(){try{const h=JSON.parse(store.get('cf-hist','[]'));return Array.isArray(h)?h:[]}catch(e){return[]}}
+function saveMatch(win){const h=hist();h.unshift({d:Date.now(),w:win?1:0,m:G.me,b:G.bot,l:diff,c:{m:CON.m,l:CON.l.slice()}});store.set('cf-hist',JSON.stringify(h.slice(0,300)))}
+let sure=false,STAB='bot';
+$('stabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;STAB=b.dataset.s;sure=false;paintStats()};
+function paintStats(){
+  document.querySelectorAll('#stabs button').forEach(b=>b.classList.toggle('on',b.dataset.s===STAB));
+  if(STAB==='on')return paintOnStats();
+  const h=hist(),w=h.filter(x=>x.w).length;let best=0,cur=0;
+  for(let i=h.length-1;i>=0;i--){cur=h[i].w?cur+1:0;if(cur>best)best=cur}
+  $('tiles').innerHTML=[[h.length,'sPlayed'],[w,'sWon'],[h.length?Math.round(100*w/h.length)+'%':'–','sRate'],[best,'sStreak']].map(([v,k])=>`<div><b>${v}</b><span>${t(k)}</span></div>`).join('');
+  const f=d=>new Date(d).toLocaleString(LOC[L],{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  $('shist').innerHTML=h.length?h.map(x=>`<div class="hr"><i class="${x.w?'w':'l'}">${WL[L][x.w?0:1]}</i><div><b>${f(x.d)}</b><span>${t('bot')} · ${t('lv')[x.l]||''} · ${conName(x.c)}</span></div><em>${x.m}–${x.b}</em></div>`).join(''):`<div class="mut" style="text-align:center;margin-top:20px">${t('sEmpty')}</div>`;
+  $('sreset').textContent=t(sure?'sSure':'sReset');$('sreset').style.display=h.length?'':'none';
+}
+function paintOnStats(){
+  const fmt=d=>new Date(d).toLocaleString(LOC[L],{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const note=x=>`<div class="mut" style="text-align:center;margin-top:20px">${x}</div>`;
+  $('sreset').style.display='none';$('tiles').innerHTML='';
+  if(!ME){$('shist').innerHTML=note(t('oNeedMail'));return}
+  $('shist').innerHTML=note('…');
+  netInit().then(()=>net.get('stats/'+ME.k)).then(s=>{
+    if(STAB!=='on')return;s=s||{p:0,w:0};const h=s.h||[];
+    $('tiles').innerHTML=[[s.p||0,'sPlayed'],[s.w||0,'sWon'],[s.p?Math.round(100*(s.w||0)/s.p)+'%':'–','sRate'],[(s.p||0)-(s.w||0),'sLost']].map(([v,k])=>`<div><b>${v}</b><span>${t(k)}</span></div>`).join('');
+    $('shist').innerHTML=h.length?h.map(x=>`<div class="hr"><i class="${x.w?'w':'l'}">${WL[L][x.w?0:1]}</i><div><b>${fmt(x.d)}</b><span>${esc(x.o||'')}</span></div><em>${x.m}–${x.b}</em></div>`).join(''):note(t('oNoStats'));
+  }).catch(()=>{$('shist').innerHTML=note(t('oErr'))});
+}
+$('toS').onclick=()=>{sure=false;paintStats();show('statscr')};
+$('sreset').onclick=()=>{if(!sure){sure=true;return paintStats()}store.set('cf-hist','[]');sure=false;paintStats()};
+
+/* ---------- ONLINE: bağlantı katmanı ---------- */
+const NET={ready:null,mock:false,off:0,db:null};
+const MK='cf-mock';let mCh=null,mL=[],mBye=[];
+const mSplit=p=>{const k=p.split('/');return[MK+':'+k.slice(0,2).join('/'),k.slice(2)]};
+const mLoad=key=>{try{return JSON.parse(localStorage.getItem(key))}catch(e){return null}};
+function mGet(p){const[key,ks]=mSplit(p);let o=mLoad(key);for(const k of ks){if(o==null||typeof o!=='object')return null;o=o[k]}return o===undefined?null:o}
+function mFire(){mL.forEach(l=>{const v=mGet(l.p),j=JSON.stringify(v);if(j!==l.j){l.j=j;l.cb(v)}})}
+function mSet(p,v){const[key,ks]=mSplit(p);
+  if(!ks.length){if(v==null)localStorage.removeItem(key);else localStorage.setItem(key,JSON.stringify(v))}
+  else{let root=mLoad(key);if(root==null||typeof root!=='object')root={};let o=root;
+    for(let i=0;i<ks.length-1;i++){if(o[ks[i]]==null||typeof o[ks[i]]!=='object')o[ks[i]]={};o=o[ks[i]]}
+    if(v==null)delete o[ks[ks.length-1]];else o[ks[ks.length-1]]=v;localStorage.setItem(key,JSON.stringify(root))}
+  mFire();if(mCh)mCh.postMessage(1)}
+function netInit(){
+  if(NET.ready)return NET.ready;
+  NET.ready=new Promise((res,rej)=>{
+    if(!window.FB_CONFIG||!window.FB_CONFIG.databaseURL){
+      NET.mock=true;try{mCh=new BroadcastChannel(MK);mCh.onmessage=mFire}catch(e){}
+      addEventListener('storage',e=>{if(e.key&&e.key.startsWith(MK))mFire()});
+      addEventListener('pagehide',()=>mBye.forEach(([p,v])=>mSet(p,v)));return res();
+    }
+    const load=src=>new Promise((ok,no)=>{const e=document.createElement('script');e.src=src;e.onload=ok;e.onerror=no;document.head.appendChild(e)});
+    const V='https://www.gstatic.com/firebasejs/10.12.2/';
+    load(V+'firebase-app-compat.js').then(()=>load(V+'firebase-database-compat.js')).then(()=>{
+      firebase.initializeApp(window.FB_CONFIG);NET.db=firebase.database();
+      NET.db.ref('.info/serverTimeOffset').on('value',x=>{NET.off=x.val()||0});res();
+    }).catch(e=>{NET.ready=null;rej(e)});
+  });
+  return NET.ready;
+}
+const net={
+  now:()=>Date.now()+NET.off,
+  get:p=>NET.mock?Promise.resolve(mGet(p)):NET.db.ref(p).get().then(x=>x.val()),
+  set:(p,v)=>{if(NET.mock){mSet(p,v);return Promise.resolve()}return NET.db.ref(p).set(v)},
+  on:(p,cb)=>{if(NET.mock){const l={p,cb,j:undefined};mL.push(l);setTimeout(()=>{if(l.dead)return;const v=mGet(p);l.j=JSON.stringify(v);cb(v)},0);return()=>{l.dead=true;mL=mL.filter(x=>x!==l)}}
+    const r=NET.db.ref(p),h=r.on('value',x=>cb(x.val()));return()=>r.off('value',h)},
+  tx:(p,fn)=>{if(NET.mock){const v=mGet(p),nv=fn(v==null?null:JSON.parse(JSON.stringify(v)));if(nv===undefined)return Promise.resolve({ok:false,val:v});mSet(p,nv);return Promise.resolve({ok:true,val:nv})}
+    return NET.db.ref(p).transaction(fn).then(r=>({ok:r.committed,val:r.snapshot.val()}))},
+  bye:(p,v)=>{if(NET.mock)mBye.push([p,v]);else NET.db.ref(p).onDisconnect().set(v)},
+  unbye:p=>{if(NET.mock)mBye=mBye.filter(x=>x[0]!==p);else NET.db.ref(p).onDisconnect().cancel()}
+};
+
+/* ---------- ONLINE: kimlik ---------- */
+let ME=null;try{ME=JSON.parse(store.get('cf-me','null'))}catch(e){}
+if(ME&&!ME.m)ME=null;
+// e-posta yalnızca yazılabilen 'mails' dalına kaydedilir; site sahibi Firebase konsolundan görür
+function saveMail(){if(ME&&ME.m)net.set('mails/'+ME.k,{m:ME.m,n:ME.n,l:L,t:net.now()}).catch(()=>{})}
+async function hashMail(m){
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('cift-forma:'+m));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,40)}
+  catch(e){let h=2166136261;for(const c of m){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return'f'+(h>>>0).toString(16)+m.length}
+}
+async function setMail(m){m=m.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))return false;
+  ME={k:await hashMail(m),n:m.split('@')[0].slice(0,16),m};store.set('cf-me',JSON.stringify(ME));return true}
+
+/* ---------- ONLINE: oda ve oyun ---------- */
+const other=s=>s==='a'?'b':'a';
+function poolsFor(slot,round,con){const sw=(round%2===0)!==(slot==='b');
+  if(con.m==='one'){const p=CLUBS.filter(x=>x.lg===con.l[0]);return[p,t('wLg',lgName(con.l[0]))]}
+  if(con.m==='two'){const a=con.l[sw?1:0];return[CLUBS.filter(x=>x.lg===a),t('wLg',lgName(a))]}
+  if(con.m==='nat')return sw?[CLUBS,t('wClub')]:[NATS,t('wNat')];
+  return[CLUBS,t('wAny')];
+}
+const ON={code:null,slot:null,un:null,key:null,room:null,rand:false,started:false,
+  path(x){return'rooms/'+this.code+(x?'/'+x:'')},
+  newCode(){const A='ABCDEFGHJKLMNPRSTUVYZ';return Array.from({length:4},()=>A[Math.floor(Math.random()*A.length)]).join('')},
+  me(){return{n:ME.n,k:ME.k.slice(0,10),on:true,ready:0,pick:-1,out:0}},
+  async create(con,rand){
+    await netInit();saveMail();this.code=this.newCode();this.slot='a';this.rand=!!rand;
+    await net.set(this.path(),{con:{m:con.m,l:con.l.slice(0,2)},p:{a:this.me()},st:{phase:'lobby',round:0,sa:0,sb:0,wa:0,wb:0,t0:net.now()}});
+    this.listen();
+  },
+  async join(code){
+    await netInit();saveMail();code=code.trim().toUpperCase();if(!/^[A-Z]{4}$/.test(code))return false;
+    const cur=await net.get('rooms/'+code);if(!cur||!cur.p||cur.p.b)return false;
+    const me=this.me(),r=await net.tx('rooms/'+code,x=>{if(!x||!x.p||x.p.b)return;x.p.b=me;return x});
+    if(!r.ok)return false;this.code=code;this.slot='b';this.rand=false;this.listen();return true;
+  },
+  async random(){
+    await this.create({m:'all',l:[0,1]},true);const mine=this.code;let took=null;
+    await net.tx('queue/all',qv=>{const now=net.now();if(qv&&qv.code&&qv.code!==mine&&now-qv.ts<120000){took=qv.code;return null}took=null;return{code:mine,ts:now}});
+    if(took){const old=mine;this.stop();net.set('rooms/'+old,null);if(!(await this.join(took)))return this.random()}
+    else net.bye('queue/all',null);
+  },
+  listen(){const p=this.path('p/'+this.slot+'/on');net.set(p,true);net.bye(p,false);this.key=null;this.started=false;const code=this.code,tok=this.tok={};this.un=net.on(this.path(),r=>{if(this.tok===tok&&this.code===code)this.snap(r)})},
+  stop(){if(this.un)this.un();this.un=null;this.tok=null;if(this.code)net.unbye(this.path('p/'+this.slot+'/on'));this.code=null;this.room=null;this.key=null},
+  leave(){
+    if(!this.code)return;const code=this.code,slot=this.slot,r=this.room,waiting=r&&!r.p.b;
+    if(this.rand)net.tx('queue/all',qv=>qv&&qv.code===code?null:undefined);
+    this.stop();if(waiting)net.set('rooms/'+code,null);else net.set('rooms/'+code+'/p/'+slot+'/on',false);
+  },
+  snap(r){
+    if(!this.code)return;
+    if(!r||!r.p||!r.p[this.slot]){this.stop();G=null;stopAll();paintOnline(t('oGone'));show('online');return}
+    this.room=r;const o=other(this.slot),op=r.p[o],st=r.st;
+    if(!op){paintOnline();return}
+    if(!this.started){this.started=true;G={online:true,me:0,bot:0,strikes:0,round:0,phase:'ready'};audio();paintSnd();show('game')}
+    G.opp=op.n||'?';G.oppOff=op.on===false;G.me=st['s'+this.slot];G.bot=st['s'+o];G.strikes=st['w'+this.slot];G.round=st.round;
+    $('botnm').textContent=G.opp.toUpperCase();pips();
+    const key=st.phase+':'+st.round+':'+st.t0;if(key!==this.key){this.key=key;this.enter(r)}
+    this.tick(r);
+  },
+  status(r){const el=$('ost');if(!el)return;const st=r.st,need=st.round+1,me=r.p[this.slot],op=r.p[other(this.slot)];
+    el.textContent=me.ready===need?(op.ready===need?'':t('oYouReady')):(op.ready===need?t('oOppReady'):'');
+    const b=$('rdy');if(b)b.classList.toggle('off',me.ready===need)},
+  tick(r){
+    const st=r.st,me=r.p[this.slot],op=r.p[other(this.slot)];
+    if(st.phase==='lobby'||st.phase==='reveal'){this.status(r);if(me.ready===st.round+1&&op.ready===st.round+1)this.next()}
+    if(st.phase==='guess'){
+      if(op.out===st.round&&!this.oppOut){this.oppOut=true;if(me.out!==st.round){FX.soft();setMsg(t('oOppWrong',G.opp),'botc')}}
+      if(me.out===st.round&&op.out===st.round)this.none();
+    }
+  },
+  enter(r){
+    stopAll();const st=r.st,me=this.slot,o=other(me),now=net.now();
+    if(st.phase==='lobby'){
+      G.phase='ready';inp.classList.remove('on');
+      head.innerHTML=`<div class="mut">${t('intro')}</div><div class="nxt" style="margin-top:10px">${t('now',poolsFor(me,1,r.con)[1])}</div>`;
+      body.innerHTML=`<div class="note">${conName(r.con)}</div><button class="ready" id="rdy">${t('ready')}</button><div class="note" id="ost"></div>`;
+      $('rdy').onclick=()=>{audio();net.set(this.path('p/'+me+'/ready'),st.round+1)};
+    }else if(st.phase==='pick'){
+      G.phase='pick';G.pick=null;G.botPick=null;this.oppOut=false;
+      const pl=poolsFor(me,st.round,r.con);G.poolMe=pl[0];G.label=t('now',pl[1]);
+      body.innerHTML='';inp.classList.add('on');q.disabled=false;q.value='';q.placeholder=t('phTeam');sg.innerHTML='';setMsg(G.label);q.focus();
+      head.innerHTML='<div class="d big pop">3</div>';
+      [3,2,1].forEach((n,i)=>later(()=>{head.innerHTML=`<div class="d big pop">${n}</div>`;FX.tick()},Math.max(0,st.t0+i*TICK-now)));
+      later(()=>this.resolve(st.round),Math.max(0,st.t0+3*TICK+250-now));
+    }else if(st.phase==='guess'){
+      G.phase='guess';G.pick=st['t'+me];G.botPick=st['t'+o];G.m=common(G.pick,G.botPick);G.meOut=false;this.oppOut=false;
+      head.innerHTML=duo(G.pick,G.botPick,G.m.length,true)+'<div class="bar"><i></i></div>';
+      body.innerHTML='';inp.classList.add('on');q.disabled=false;q.value='';sg.innerHTML='';q.placeholder=t('phPlayer');setMsg(t('guess'));q.focus();FX.go();
+      [3,2,1].forEach(n=>later(FX.tick,Math.max(0,st.t0+GUESS-n*1000-now)));
+      later(()=>this.none(),Math.max(0,st.t0+GUESS+250-now));
+    }else this.reveal(r);
+  },
+  reveal(r){
+    const st=r.st,me=this.slot,o=other(me),res=st.res||{k:'none'},over=st.phase==='over',now=net.now();
+    G.phase='reveal';inp.classList.remove('on');q.blur();
+    const a=st['t'+me],b=st['t'+o];let title,cls='no',p=null,cards='',many=false;
+    if(res.k==='ans'){p=PL[res.p];if(res.by===me){title=t('win');cls='me'}else{title=t('oOppGot',esc(G.opp));cls='bot'}}
+    else if(res.k==='nomatch')title=t('noMatch');
+    else if(res.k==='same')title=t('oSame');
+    else if(res.k==='nopick'){const miss=res.miss||[];title=miss.includes(me)?(res.pen===me?t('oMyPen'):t('noPick')):(res.pen===o?t('oOppPen',esc(G.opp)):t('oOppNoPick',esc(G.opp)))}
+    else title=t('none');
+    if(a>=0&&b>=0&&a!==b&&res.k!=='nopick'){
+      const m=common(a,b),list=p?[p,...m.filter(x=>x!==p)]:m;many=list.length>4;
+      cards=list.length?`<div class="cards${many?' many':''}">${list.map(x=>pcard(x,a,b,x===p)).join('')}</div>`:'';
+      head.innerHTML=duo(a,b,m.length,false);
+    }else head.innerHTML='';
+    if(over){
+      const win=st['s'+me]>=WIN;FX.match(win);this.record(win,st);
+      body.innerHTML=`<div class="d res ${win?'me':'bot'}">${win?t('gWin'):t('oOppWin',esc(G.opp))}</div>${cards}
+        <div class="endbtns"><button class="btn" id="again">${t('oRematch')}</button><button class="btn ghost" id="hm">${t('menu')}</button></div>`;
+      $('again').onclick=()=>net.tx(this.path(),x=>{if(!x||x.st.phase!=='over')return;x.st={phase:'lobby',round:0,sa:0,sb:0,wa:0,wb:0,t0:net.now()};x.rec=null;x.p.a.ready=0;x.p.b.ready=0;return x});
+      $('hm').onclick=()=>{this.leave();G=null;paintAll();show('home')};
+      return;
+    }
+    if(res.k==='ans')(res.by===me?FX.win:FX.lose)();else if(res.k==='nopick'&&(res.miss||[]).includes(me))FX.bad();else FX.none();
+    const left=()=>Math.max(0,Math.ceil((st.t0+WAIT*1000-net.now())/1000));
+    body.innerHTML=`<div class="d res ${cls}">${title}</div>${cards}
+      <div class="nxt">${t('next',poolsFor(me,st.round+1,r.con)[1])}</div>
+      <button class="ready ${many?'xs':'s'}" id="rdy">${t('ready')}<small id="cd">${left()}</small></button><div class="note" id="ost"></div>`;
+    $('rdy').onclick=()=>net.set(this.path('p/'+me+'/ready'),st.round+1);
+    for(let i=1;i<=WAIT;i++)later(()=>{const c=$('cd');if(c)c.textContent=left()},Math.max(0,st.t0+i*1000-now));
+    later(()=>this.next(),Math.max(0,st.t0+WAIT*1000+200-now));
+  },
+  next(){const rd=this.room.st.round;
+    return net.tx(this.path(),x=>{if(!x||!x.p.b)return;const st=x.st,now=net.now();
+      if(!(st.phase==='lobby'||st.phase==='reveal')||st.round!==rd)return;
+      const both=x.p.a.ready===rd+1&&x.p.b.ready===rd+1;
+      if(!both&&!(st.phase==='reveal'&&now>=st.t0+WAIT*1000))return;
+      st.phase='pick';st.round=rd+1;st.t0=now+700;st.res=null;st.ta=-1;st.tb=-1;
+      x.p.a.pick=-1;x.p.b.pick=-1;x.p.a.out=0;x.p.b.out=0;return x})},
+  resolve(rd){
+    return net.tx(this.path(),x=>{if(!x||x.st.phase!=='pick'||x.st.round!==rd)return;const st=x.st,now=net.now();
+      const pa=x.p.a.pick,pb=x.p.b.pick,miss=[];if(!(pa>=0))miss.push('a');if(!(pb>=0))miss.push('b');
+      st.ta=pa>=0?pa:-1;st.tb=pb>=0?pb:-1;st.t0=now;
+      if(miss.length){const res={k:'nopick',miss};
+        miss.forEach(s=>{st['w'+s]=(st['w'+s]||0)+1;if(st['w'+s]>=3){st['w'+s]=0;st['s'+other(s)]++;res.pen=s}});
+        st.res=res;st.phase=(st.sa>=WIN||st.sb>=WIN)?'over':'reveal'}
+      else if(pa===pb){st.res={k:'same'};st.phase='reveal'}
+      else if(!common(pa,pb).length){st.res={k:'nomatch'};st.phase='reveal'}
+      else{st.res=null;st.phase='guess'}
+      return x})},
+  none(){const rd=this.room.st.round;
+    return net.tx(this.path(),x=>{if(!x||x.st.phase!=='guess'||x.st.round!==rd)return;x.st.res={k:'none'};x.st.phase='reveal';x.st.t0=net.now();return x})},
+  answer(p){
+    const st=this.room.st,rd=st.round,me=this.slot;
+    if(p.c[G.pick]&&p.c[G.botPick])return net.tx(this.path(),x=>{if(!x||x.st.phase!=='guess'||x.st.round!==rd)return;
+      x.st['s'+me]++;x.st.res={k:'ans',by:me,p:p.i};x.st.phase=x.st['s'+me]>=WIN?'over':'reveal';x.st.t0=net.now();return x});
+    FX.bad();G.meOut=true;q.value='';q.disabled=true;sg.innerHTML='';setMsg(t('meWrong',p.n),'bad');
+    net.set(this.path('p/'+me+'/out'),rd);
+  },
+  record(win,st){
+    const me=this.slot,o=other(me),entry={d:net.now(),w:win?1:0,m:st['s'+me],b:st['s'+o],o:G.opp};
+    net.tx(this.path('rec/'+me),v=>v?undefined:true).then(r=>{if(!r.ok)return;
+      net.tx('stats/'+ME.k,s=>{s=s||{p:0,w:0};s.p=(s.p||0)+1;if(win)s.w=(s.w||0)+1;s.h=[entry].concat(s.h||[]).slice(0,50);return s})});
+  }
+};
+function paintOnline(err){
+  const o=$('obody'),r=ON.room;
+  if(!ME){
+    o.innerHTML=`<div class="card"><h2>${t('oMail')}</h2><small>${t('oMailD')}</small>
+      <input class="q" id="omail" type="email" inputmode="email" autocomplete="email" style="margin-top:10px" placeholder="ad@ornek.com">
+      <div class="msg bad" id="oerr"></div><button class="btn" id="ogo">${t('oGo')}</button></div>`;
+    $('ogo').onclick=async()=>{if(await setMail($('omail').value)){paintOnline();netInit().then(saveMail).catch(()=>{})}else $('oerr').textContent=t('oBadMail')};
+    return;
+  }
+  if(ON.code&&r&&!r.p.b){
+    const link=location.origin&&location.origin!=='null'?location.origin+location.pathname+'?oda='+ON.code:'';
+    o.innerHTML=ON.rand?`<div class="card" style="text-align:center"><h2>${t('oSearch')}</h2></div><button class="btn ghost" id="ocan">${t('oCancel')}</button>`
+     :`<div class="card" style="text-align:center"><small>${t('oShare')}</small><div class="big2" style="margin:10px 0">${ON.code}</div><small>${conName(r.con)}</small>
+       ${link?`<button class="btn ghost" id="ocopy" style="margin-top:12px">${t('oCopy')}</button>`:''}</div>
+       <div class="note">${t('oWait')}</div><button class="btn ghost" id="ocan">${t('oCancel')}</button>`;
+    $('ocan').onclick=()=>{ON.leave();paintOnline()};
+    const c=$('ocopy');if(c)c.onclick=()=>{try{navigator.clipboard.writeText(link).then(()=>{c.textContent=t('oCopied')}).catch(()=>{})}catch(e){}};
+    return;
+  }
+  o.innerHTML=`<div class="note">${t('oHi',esc(ME.n))} · <a href="#" id="ochg" style="color:var(--acc)">${t('oChange')}</a></div>
+    <div class="card"><h2>${t('oNew')}</h2><small>${t('oNewD',conName())}</small><button class="btn" id="onew" style="margin-top:10px">${t('oNew')}</button></div>
+    <div class="card"><h2>${t('oCode')}</h2><div class="row2" style="margin-top:10px"><input class="q" id="ocode" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="ABCD"><button class="btn" id="ojoin">${t('oJoin')}</button></div></div>
+    <button class="btn ghost" id="orand">${t('oRand')}</button>
+    <div class="msg bad" id="oerr">${err||''}</div>
+    ${NET.mock?`<div class="note">${t('oMock')}</div>`:''}`;
+  const fail=()=>{const e=$('oerr');if(e)e.textContent=t('oErr')};
+  $('ochg').onclick=e=>{e.preventDefault();ME=null;store.set('cf-me','null');paintOnline()};
+  $('onew').onclick=()=>{audio();ON.create(CON).catch(fail)};
+  $('ojoin').onclick=()=>{audio();ON.join($('ocode').value).then(ok=>{if(!ok)$('oerr').textContent=t('oNoRoom')}).catch(fail)};
+  $('orand').onclick=()=>{audio();ON.random().catch(fail)};
+  if(PRE){$('ocode').value=PRE;PRE=''}
+}
+let PRE='';try{PRE=(new URLSearchParams(location.search).get('oda')||'').toUpperCase().slice(0,4)}catch(e){}
+$('toO').onclick=()=>{show('online');paintOnline();netInit().then(()=>{if(!ON.code)paintOnline()}).catch(()=>{const e=$('oerr');if(e)e.textContent=t('oErr')})};
+if(PRE)setTimeout(()=>$('toO').click(),0);
+
+/* ---------- FORMA ARŞİVİ ---------- */
+const X={a:null,b:null,act:'a',mode:'teams',p:null};
+const xq=$('xq'),xsg=$('xsg');
+function paintX(){
+  document.querySelectorAll('#xtabs button').forEach(b=>b.classList.toggle('on',b.dataset.x===X.mode));
+  $('xp').className='xp'+(X.mode==='player'?' off':'');xq.placeholder=t(X.mode==='player'?'phPlayer':'phTeam');
+  if(X.mode==='player'){
+    const o=$('xout'),p=X.p;
+    if(!p){o.innerHTML=`<div class="mut" style="text-align:center;margin-top:20px">${t('xpEmpty')}</div>`;return}
+    const y0=k=>p.c[k][0]==='#'?9999:+((p.c[k].match(/\d{4}/)||[9000])[0]);const ks=Object.keys(p.c).sort((a,b)=>y0(a)-y0(b));
+    o.innerHTML=`<div class="ph"><b>${p.n}</b><span>${p.y}</span></div><div class="cards">${ks.map(k=>`<div class="pc"><b>${tn(+k)}</b><div>${crest(+k,'sm')}${span(p,k)} · ${lgLine(+k)}</div></div>`).join('')}</div>`;
+    o.scrollTop=0;return;
+  }
+  ['a','b'].forEach(s=>{const el=$('x'+s),id=X[s];el.className=X.act===s?'on':'';
+    el.innerHTML=crest(id)+`<span class="n">${id!=null?tn(id):t(s==='a'?'t1':'t2')}</span>`});
+  const out=$('xout'),note=x=>`<div class="mut" style="text-align:center;margin-top:20px">${x}</div>`;
+  if(X.a==null||X.b==null){out.innerHTML=note(t('xEmpty'));return}
+  if(X.a===X.b){out.innerHTML=note(t('xSame'));return}
+  const m=common(X.a,X.b);
+  out.innerHTML=`<div class="xh">${m.length?t('xN',m.length):t('noMatch')}</div><div class="cards">${m.slice(0,80).map(p=>pcard(p,X.a,X.b)).join('')}</div>${m.length>80?`<div class="more">${t('xMore',m.length)}</div>`:''}`;
+  out.scrollTop=0;
+}
+$('toX').onclick=()=>{show('xplore');paintX()};
+$('xa').onclick=()=>{X.act='a';paintX();xq.focus()};
+$('xb').onclick=()=>{X.act='b';paintX();xq.focus()};
+$('xtabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;X.mode=b.dataset.x;xq.value='';xsg.innerHTML='';paintX()};
+xq.oninput=()=>{xsg.innerHTML=X.mode==='player'?(norm(xq.value).length>=2?rank(PL,xq.value,5):[]).map(p=>`<button data-p="${p.i}">${p.n}<i>${p.y}</i></button>`).join(''):rank(TW,xq.value,5).map(c=>`<button data-id="${c.i}">${crest(c.i)}${tn(c.i)}<i>${lgLine(c.i)}</i></button>`).join('')};
+xsg.onmousedown=e=>e.preventDefault();
+xsg.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(X.mode==='player'){X.p=PL[+b.dataset.p];xq.value='';xsg.innerHTML='';xq.blur();return paintX()}
+  X[X.act]=+b.dataset.id;xq.value='';xsg.innerHTML='';
+  if(X.act==='a'&&X.b==null){X.act='b';xq.focus()}else xq.blur();
+  paintX()};
+paintAll();
+</script>
+</body>
+</html>
