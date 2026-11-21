@@ -66,6 +66,15 @@ input{-webkit-user-select:text;user-select:text}
 #rep textarea{width:100%;height:120px;resize:none;background:#0a1813;border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:10px;font:inherit;font-size:16px}
 #rep small{color:var(--mut)}
 #rep .two{display:flex;gap:8px}
+#blist{flex:1;min-height:0;overflow-y:auto;margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.brow{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 12px}
+.brow.me{border-color:var(--acc)}
+.brow .r{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;width:28px;color:var(--mut)}
+.brow:nth-child(-n+3) .r{color:var(--acc)}
+.brow .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.brow .w{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px}
+.brow .p{color:var(--mut);font-size:12px;width:64px;text-align:right}
+.btn.share{margin-top:8px;background:#0a1813;color:var(--acc);border:1px solid var(--acc)}
 .cnt{font-size:12px;font-weight:700;color:var(--acc);background:#0a1813;border:1px solid var(--line);border-radius:99px;padding:3px 9px;white-space:nowrap}
 .cnt:empty{display:none}
 @media (prefers-reduced-motion:reduce){.live{animation:none}}
@@ -180,7 +189,7 @@ input{-webkit-user-select:text;user-select:text}
 <div id="app">
 
 <section class="scr on" id="home">
-  <div class="toprow"><button class="pill" id="toS" data-t="stats"></button><div class="lang"><button data-l="tr">TR</button><button data-l="en">EN</button><button data-l="fr">FR</button></div></div>
+  <div class="toprow"><span style="display:flex;gap:6px"><button class="pill" id="toS" data-t="stats"></button><button class="pill" id="toB" data-t="board"></button></span><div class="lang"><button data-l="tr">TR</button><button data-l="en">EN</button><button data-l="fr">FR</button></div></div>
   <div class="logo"><h1 id="ttl"></h1><p data-t="tag"></p></div>
   <div class="menu">
     <button class="card rowbtn hot" id="toO">
@@ -223,6 +232,12 @@ input{-webkit-user-select:text;user-select:text}
   <div id="obody" style="flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
 </section>
 
+<section class="scr" id="boardscr">
+  <div class="top"><button class="back" data-home>‹</button><h2 style="font-size:28px" data-t="board"></h2></div>
+  <div class="note" data-t="bNote" style="margin-top:10px"></div>
+  <div id="blist"></div>
+</section>
+
 <section class="scr" id="statscr">
   <div class="top"><button class="back" data-home>‹</button><h2 style="font-size:28px" data-t="stats"></h2></div>
   <div class="seg" id="stabs" style="margin-bottom:0"><button data-s="bot">Bot</button><button data-s="on">Online</button></div>
@@ -262,14 +277,14 @@ input{-webkit-user-select:text;user-select:text}
 </section>
 
 </div>
-<script src="config.js?v=5"></script>
+<script src="config.js?v=6"></script>
 <script src="data.js?v=2"></script>
 <script>
 /* ---------- dil ---------- */
 const S={tr:{
  ttl:'Çift<br><b>Forma</b>',tag:'İki takım seç. İkisinde de forma giymiş<br>oyuncuyu rakibinden önce bul.',
  vsBot:'Bota karşı',vsBotSub:'İnternetsiz · 3 puana ilk ulaşan kazanır',concept:'Konsept',easy:'Kolay',mid:'Orta',hard:'Zor',play:'Oyna',
- bridge:'Forma Arşivi',bridgeSub:'İki takımın ortak oyuncuları ya da bir oyuncunun tüm takımları',stats:'İstatistik',tabTeams:'İki takım',tabPlayer:'Oyuncu',xpEmpty:'Bir oyuncu adı yaz, forma giydiği takımları gör.',sPlayed:'Maç',sWon:'Galibiyet',sRate:'Oran',sStreak:'En iyi seri',sLost:'Mağlubiyet',sEmpty:'Henüz maç yok. İlk maçını oyna.',sReset:'İstatistikleri sıfırla',sSure:'Emin misin? Silmek için tekrar dokun',wAny:'istediğin kulübü',wNat:'milli takım',wClub:'kulüp',wLg:x=>`${x} takımı`,now:x=>`Bu tur: ${x} seç`,next:x=>`Sıradaki tur: ${x} seç`,online:'Online düello',nOnline:n=>n+' çevrimiçi',onlineSub:'Arkadaşınla ya da rastgele bir rakiple',report:'Hata bildir',repSub:'Yanlış ya da eksik oyuncu, takım, takılan ekran… Ne gördüğünü kısaca yaz.',repCancel:'Vazgeç',repSend:'Gönder',repBusy:'Gönderiliyor…',repOk:'Teşekkürler, ulaştı.',repFail:'Gönderilemedi. İnternetini kontrol edip tekrar dene.',repEmpty:'Önce birkaç kelime yaz.',oMail:'E-posta adresin',oMailD:'Oturum açmak yok. E-postan istatistiklerini bulmak için kullanılır; adresin kaydedilir ve oyunla ilgili sana ulaşabiliriz.',oGo:'Devam',oHi:x=>`Oyuncu: ${x}`,oChange:'E-postayı değiştir',oNew:'Oda kur',oNewD:x=>`Konsept: ${x}`,oJoin:'Katıl',oCode:'Oda kodu',oRand:'Rastgele rakip',oWait:'Rakip bekleniyor…',oSearch:'Rakip aranıyor…',oShare:'Bu kodu arkadaşına gönder',oCopy:'Bağlantıyı kopyala',oCopied:'Kopyalandı',oCancel:'Vazgeç',oNoRoom:'Oda bulunamadı ya da dolu.',oBadMail:'Geçerli bir e-posta yaz.',oErr:'Bağlantı kurulamadı.',oMock:'Deneme modu: sunucu ayarlı değil, yalnızca bu tarayıcının sekmeleri arasında çalışır.',oOppReady:'Rakip hazır',oOppWait:'Rakip bekleniyor',oYouReady:'Hazırsın · rakip bekleniyor',oOppWrong:x=>`${x} yanlış bildi · fırsat sende`,oOppGot:x=>`${x} bildi`,oOppNoPick:x=>`${x} takım seçmedi · tur geçersiz`,oOppPen:x=>`${x} 3. uyarıyı aldı · sana +1 puan`,oMyPen:'3. uyarı · ceza: rakibe +1 puan',oSame:'Aynı takım seçildi · tur geçersiz',oOppWin:x=>`${x} kazandı`,oRematch:'Rövanş',oGone:'Rakip ayrıldı',oOff:'çevrimdışı',oNoStats:'Online maç yok.',oNeedMail:'Online istatistik için önce Online düello ekranında e-postanı yaz.',ok:'Tamam',you:'SEN',bot:'BOT',
+ bridge:'Forma Arşivi',bridgeSub:'İki takımın ortak oyuncuları ya da bir oyuncunun tüm takımları',stats:'İstatistik',tabTeams:'İki takım',tabPlayer:'Oyuncu',xpEmpty:'Bir oyuncu adı yaz, forma giydiği takımları gör.',sPlayed:'Maç',sWon:'Galibiyet',sRate:'Oran',sStreak:'En iyi seri',sLost:'Mağlubiyet',sEmpty:'Henüz maç yok. İlk maçını oyna.',sReset:'İstatistikleri sıfırla',sSure:'Emin misin? Silmek için tekrar dokun',wAny:'istediğin kulübü',wNat:'milli takım',wClub:'kulüp',wLg:x=>`${x} takımı`,now:x=>`Bu tur: ${x} seç`,next:x=>`Sıradaki tur: ${x} seç`,online:'Online düello',board:'Sıralama',bNote:'Online düellolarda en çok kazananlar',bEmpty:'Henüz kimse yok. İlk galibiyet senin olsun.',bErr:'Sıralama yüklenemedi.',bWins:'galibiyet',bPlayed:n=>n+' maç',share:'Paylaş',shWin:'KAZANDIM',shVs:'Rakip',shCta:'Sen de dene',shText:'Çift Forma’da kazandım. Sen de dene:',shSaved:'Görsel indirildi, bağlantı kopyalandı.',oNick:'Takma ad (sıralamada görünür)',nOnline:n=>n+' çevrimiçi',onlineSub:'Arkadaşınla ya da rastgele bir rakiple',report:'Hata bildir',repSub:'Yanlış ya da eksik oyuncu, takım, takılan ekran… Ne gördüğünü kısaca yaz.',repCancel:'Vazgeç',repSend:'Gönder',repBusy:'Gönderiliyor…',repOk:'Teşekkürler, ulaştı.',repFail:'Gönderilemedi. İnternetini kontrol edip tekrar dene.',repEmpty:'Önce birkaç kelime yaz.',oMail:'E-posta adresin',oMailD:'Oturum açmak yok. E-postan istatistiklerini bulmak için kullanılır; adresin kaydedilir ve oyunla ilgili sana ulaşabiliriz.',oGo:'Devam',oHi:x=>`Oyuncu: ${x}`,oChange:'E-postayı değiştir',oNew:'Oda kur',oNewD:x=>`Konsept: ${x}`,oJoin:'Katıl',oCode:'Oda kodu',oRand:'Rastgele rakip',oWait:'Rakip bekleniyor…',oSearch:'Rakip aranıyor…',oShare:'Bu kodu arkadaşına gönder',oCopy:'Bağlantıyı kopyala',oCopied:'Kopyalandı',oCancel:'Vazgeç',oNoRoom:'Oda bulunamadı ya da dolu.',oBadMail:'Geçerli bir e-posta yaz.',oErr:'Bağlantı kurulamadı.',oMock:'Deneme modu: sunucu ayarlı değil, yalnızca bu tarayıcının sekmeleri arasında çalışır.',oOppReady:'Rakip hazır',oOppWait:'Rakip bekleniyor',oYouReady:'Hazırsın · rakip bekleniyor',oOppWrong:x=>`${x} yanlış bildi · fırsat sende`,oOppGot:x=>`${x} bildi`,oOppNoPick:x=>`${x} takım seçmedi · tur geçersiz`,oOppPen:x=>`${x} 3. uyarıyı aldı · sana +1 puan`,oMyPen:'3. uyarı · ceza: rakibe +1 puan',oSame:'Aynı takım seçildi · tur geçersiz',oOppWin:x=>`${x} kazandı`,oRematch:'Rövanş',oGone:'Rakip ayrıldı',oOff:'çevrimdışı',oNoStats:'Online maç yok.',oNeedMail:'Online istatistik için önce Online düello ekranında e-postanı yaz.',ok:'Tamam',you:'SEN',bot:'BOT',
  stat:(c,n,p)=>`1990 sonrası · ${c} kulüp · ${n} milli takım · ${p} oyuncu`,
  mAll:'Tüm kulüpler',natTeam:'Milli takım',mAllD:'9 ligden istediğin kulüp',mOne:'Tek lig',mOneD:'İki taraf da aynı ligden seçer',mTwo:'Lig × Lig',mTwoD:'Biri bir ligden, diğeri öbüründen · her tur değişir',mNat:'Milli × Kulüp',mNatD:'Biri milli takım, diğeri kulüp · her tur değişir',
  hAll:'Dokuz ligin bütün kulüpleri açık.',hOne:'Bir lig seç.',hTwo:'İki lig seç.',hNat:'Bir tur sen milli takım seçersin, sonraki tur bot.',
@@ -285,7 +300,7 @@ const S={tr:{
 },en:{
  ttl:'Two<br><b>Shirts</b>',tag:'Pick two teams. Name a player who wore<br>both shirts before your rival does.',
  vsBot:'Vs bot',vsBotSub:'Offline · first to 3 points wins',concept:'Concept',easy:'Easy',mid:'Medium',hard:'Hard',play:'Play',
- bridge:'Kit Archive',bridgeSub:'Players two teams share, or every team of one player',stats:'Stats',tabTeams:'Two teams',tabPlayer:'Player',xpEmpty:'Type a player to see every team he played for.',sPlayed:'Played',sWon:'Wins',sRate:'Win rate',sStreak:'Best streak',sLost:'Losses',sEmpty:'No matches yet. Play your first one.',sReset:'Reset stats',sSure:'Are you sure? Tap again to delete',wAny:'any club',wNat:'a national team',wClub:'a club',wLg:x=>`a team from ${x}`,now:x=>`This round: pick ${x}`,next:x=>`Next round: pick ${x}`,online:'Online duel',nOnline:n=>n+' online',onlineSub:'With a friend or a random opponent',report:'Report a problem',repSub:'A wrong or missing player or team, a stuck screen… Tell us briefly what you saw.',repCancel:'Cancel',repSend:'Send',repBusy:'Sending…',repOk:'Thanks, we got it.',repFail:'Could not send. Check your connection and try again.',repEmpty:'Write a few words first.',oMail:'Your email',oMailD:'No sign-in. Your email is used to find your stats; it is stored and we may contact you about the game.',oGo:'Continue',oHi:x=>`Player: ${x}`,oChange:'Change email',oNew:'Create room',oNewD:x=>`Concept: ${x}`,oJoin:'Join',oCode:'Room code',oRand:'Random rival',oWait:'Waiting for rival…',oSearch:'Looking for a rival…',oShare:'Send this code to your friend',oCopy:'Copy link',oCopied:'Copied',oCancel:'Cancel',oNoRoom:'Room not found or full.',oBadMail:'Enter a valid email.',oErr:'Could not connect.',oMock:'Trial mode: no server configured, works only between tabs of this browser.',oOppReady:'Rival is ready',oOppWait:'Waiting for rival',oYouReady:'You are ready · waiting for rival',oOppWrong:x=>`${x} got it wrong · your chance`,oOppGot:x=>`${x} got it`,oOppNoPick:x=>`${x} did not pick · round void`,oOppPen:x=>`${x} got a 3rd warning · +1 to you`,oMyPen:'3rd warning · penalty: +1 to your rival',oSame:'Same team picked · round void',oOppWin:x=>`${x} wins`,oRematch:'Rematch',oGone:'Rival left',oOff:'offline',oNoStats:'No online matches yet.',oNeedMail:'Enter your email on the Online duel screen first to see online stats.',ok:'Done',you:'YOU',bot:'BOT',
+ bridge:'Kit Archive',bridgeSub:'Players two teams share, or every team of one player',stats:'Stats',tabTeams:'Two teams',tabPlayer:'Player',xpEmpty:'Type a player to see every team he played for.',sPlayed:'Played',sWon:'Wins',sRate:'Win rate',sStreak:'Best streak',sLost:'Losses',sEmpty:'No matches yet. Play your first one.',sReset:'Reset stats',sSure:'Are you sure? Tap again to delete',wAny:'any club',wNat:'a national team',wClub:'a club',wLg:x=>`a team from ${x}`,now:x=>`This round: pick ${x}`,next:x=>`Next round: pick ${x}`,online:'Online duel',board:'Leaderboard',bNote:'Most wins in online duels',bEmpty:'Nobody yet. Take the first win.',bErr:'Could not load the leaderboard.',bWins:'wins',bPlayed:n=>n+' played',share:'Share',shWin:'I WON',shVs:'Opponent',shCta:'Your turn',shText:'I won at Two Shirts. Your turn:',shSaved:'Image downloaded, link copied.',oNick:'Nickname (shown on the leaderboard)',nOnline:n=>n+' online',onlineSub:'With a friend or a random opponent',report:'Report a problem',repSub:'A wrong or missing player or team, a stuck screen… Tell us briefly what you saw.',repCancel:'Cancel',repSend:'Send',repBusy:'Sending…',repOk:'Thanks, we got it.',repFail:'Could not send. Check your connection and try again.',repEmpty:'Write a few words first.',oMail:'Your email',oMailD:'No sign-in. Your email is used to find your stats; it is stored and we may contact you about the game.',oGo:'Continue',oHi:x=>`Player: ${x}`,oChange:'Change email',oNew:'Create room',oNewD:x=>`Concept: ${x}`,oJoin:'Join',oCode:'Room code',oRand:'Random rival',oWait:'Waiting for rival…',oSearch:'Looking for a rival…',oShare:'Send this code to your friend',oCopy:'Copy link',oCopied:'Copied',oCancel:'Cancel',oNoRoom:'Room not found or full.',oBadMail:'Enter a valid email.',oErr:'Could not connect.',oMock:'Trial mode: no server configured, works only between tabs of this browser.',oOppReady:'Rival is ready',oOppWait:'Waiting for rival',oYouReady:'You are ready · waiting for rival',oOppWrong:x=>`${x} got it wrong · your chance`,oOppGot:x=>`${x} got it`,oOppNoPick:x=>`${x} did not pick · round void`,oOppPen:x=>`${x} got a 3rd warning · +1 to you`,oMyPen:'3rd warning · penalty: +1 to your rival',oSame:'Same team picked · round void',oOppWin:x=>`${x} wins`,oRematch:'Rematch',oGone:'Rival left',oOff:'offline',oNoStats:'No online matches yet.',oNeedMail:'Enter your email on the Online duel screen first to see online stats.',ok:'Done',you:'YOU',bot:'BOT',
  stat:(c,n,p)=>`Since 1990 · ${c} clubs · ${n} national teams · ${p} players`,
  mAll:'All clubs',natTeam:'National team',mAllD:'Any club from 9 leagues',mOne:'One league',mOneD:'Both sides pick from the same league',mTwo:'League × League',mTwoD:'One league each · sides swap every round',mNat:'Nation × Club',mNatD:'One national team, one club · swaps every round',
  hAll:'Every club from all nine leagues.',hOne:'Pick a league.',hTwo:'Pick two leagues.',hNat:'You pick a national team one round, the bot the next.',
@@ -301,7 +316,7 @@ const S={tr:{
 },fr:{
  ttl:'Deux<br><b>Maillots</b>',tag:'Choisis deux équipes. Trouve avant ton rival<br>un joueur qui a porté les deux maillots.',
  vsBot:'Contre le bot',vsBotSub:'Hors ligne · le premier à 3 points gagne',concept:'Concept',easy:'Facile',mid:'Moyen',hard:'Difficile',play:'Jouer',
- bridge:'Archives des maillots',bridgeSub:'Les joueurs communs à deux équipes, ou toutes les équipes d’un joueur',stats:'Stats',tabTeams:'Deux équipes',tabPlayer:'Joueur',xpEmpty:'Écris le nom d’un joueur pour voir toutes ses équipes.',sPlayed:'Matchs',sWon:'Victoires',sRate:'Taux',sStreak:'Meilleure série',sLost:'Défaites',sEmpty:'Aucun match pour l’instant. Joue le premier.',sReset:'Réinitialiser les stats',sSure:'Sûr ? Touche encore pour supprimer',wAny:'le club de ton choix',wNat:'une sélection nationale',wClub:'un club',wLg:x=>`une équipe — ${x}`,now:x=>`Ce tour : choisis ${x}`,next:x=>`Tour suivant : choisis ${x}`,online:'Duel en ligne',nOnline:n=>n+' en ligne',onlineSub:'Avec un ami ou un adversaire au hasard',report:'Signaler un problème',repSub:'Un joueur ou une équipe manquant ou erroné, un écran bloqué… Décris brièvement ce que tu as vu.',repCancel:'Annuler',repSend:'Envoyer',repBusy:'Envoi…',repOk:'Merci, bien reçu.',repFail:'Envoi impossible. Vérifie ta connexion et réessaie.',repEmpty:'Écris d’abord quelques mots.',oMail:'Ton e-mail',oMailD:'Pas de connexion. Ton e-mail sert à retrouver tes stats ; il est enregistré et nous pouvons te contacter au sujet du jeu.',oGo:'Continuer',oHi:x=>`Joueur : ${x}`,oChange:'Changer d’e-mail',oNew:'Créer une salle',oNewD:x=>`Concept : ${x}`,oJoin:'Rejoindre',oCode:'Code de la salle',oRand:'Rival aléatoire',oWait:'En attente du rival…',oSearch:'Recherche d’un rival…',oShare:'Envoie ce code à ton ami',oCopy:'Copier le lien',oCopied:'Copié',oCancel:'Annuler',oNoRoom:'Salle introuvable ou complète.',oBadMail:'Écris un e-mail valide.',oErr:'Connexion impossible.',oMock:'Mode essai : aucun serveur configuré, fonctionne seulement entre les onglets de ce navigateur.',oOppReady:'Ton rival est prêt',oOppWait:'En attente du rival',oYouReady:'Tu es prêt · en attente du rival',oOppWrong:x=>`${x} s’est trompé · à toi`,oOppGot:x=>`${x} a trouvé`,oOppNoPick:x=>`${x} n’a pas choisi · tour annulé`,oOppPen:x=>`3e avertissement pour ${x} · +1 pour toi`,oMyPen:'3e avertissement · pénalité : +1 pour ton rival',oSame:'Même équipe choisie · tour annulé',oOppWin:x=>`${x} gagne`,oRematch:'Revanche',oGone:'Ton rival est parti',oOff:'hors ligne',oNoStats:'Aucun match en ligne.',oNeedMail:'Écris d’abord ton e-mail dans l’écran Duel en ligne pour voir tes stats en ligne.',ok:'OK',you:'TOI',bot:'BOT',
+ bridge:'Archives des maillots',bridgeSub:'Les joueurs communs à deux équipes, ou toutes les équipes d’un joueur',stats:'Stats',tabTeams:'Deux équipes',tabPlayer:'Joueur',xpEmpty:'Écris le nom d’un joueur pour voir toutes ses équipes.',sPlayed:'Matchs',sWon:'Victoires',sRate:'Taux',sStreak:'Meilleure série',sLost:'Défaites',sEmpty:'Aucun match pour l’instant. Joue le premier.',sReset:'Réinitialiser les stats',sSure:'Sûr ? Touche encore pour supprimer',wAny:'le club de ton choix',wNat:'une sélection nationale',wClub:'un club',wLg:x=>`une équipe — ${x}`,now:x=>`Ce tour : choisis ${x}`,next:x=>`Tour suivant : choisis ${x}`,online:'Duel en ligne',board:'Classement',bNote:'Le plus de victoires en duel en ligne',bEmpty:'Personne pour l’instant. Prends la première victoire.',bErr:'Classement indisponible.',bWins:'victoires',bPlayed:n=>n+' matchs',share:'Partager',shWin:'VICTOIRE',shVs:'Adversaire',shCta:'À toi de jouer',shText:'J’ai gagné à Deux Maillots. À toi :',shSaved:'Image téléchargée, lien copié.',oNick:'Pseudo (affiché au classement)',nOnline:n=>n+' en ligne',onlineSub:'Avec un ami ou un adversaire au hasard',report:'Signaler un problème',repSub:'Un joueur ou une équipe manquant ou erroné, un écran bloqué… Décris brièvement ce que tu as vu.',repCancel:'Annuler',repSend:'Envoyer',repBusy:'Envoi…',repOk:'Merci, bien reçu.',repFail:'Envoi impossible. Vérifie ta connexion et réessaie.',repEmpty:'Écris d’abord quelques mots.',oMail:'Ton e-mail',oMailD:'Pas de connexion. Ton e-mail sert à retrouver tes stats ; il est enregistré et nous pouvons te contacter au sujet du jeu.',oGo:'Continuer',oHi:x=>`Joueur : ${x}`,oChange:'Changer d’e-mail',oNew:'Créer une salle',oNewD:x=>`Concept : ${x}`,oJoin:'Rejoindre',oCode:'Code de la salle',oRand:'Rival aléatoire',oWait:'En attente du rival…',oSearch:'Recherche d’un rival…',oShare:'Envoie ce code à ton ami',oCopy:'Copier le lien',oCopied:'Copié',oCancel:'Annuler',oNoRoom:'Salle introuvable ou complète.',oBadMail:'Écris un e-mail valide.',oErr:'Connexion impossible.',oMock:'Mode essai : aucun serveur configuré, fonctionne seulement entre les onglets de ce navigateur.',oOppReady:'Ton rival est prêt',oOppWait:'En attente du rival',oYouReady:'Tu es prêt · en attente du rival',oOppWrong:x=>`${x} s’est trompé · à toi`,oOppGot:x=>`${x} a trouvé`,oOppNoPick:x=>`${x} n’a pas choisi · tour annulé`,oOppPen:x=>`3e avertissement pour ${x} · +1 pour toi`,oMyPen:'3e avertissement · pénalité : +1 pour ton rival',oSame:'Même équipe choisie · tour annulé',oOppWin:x=>`${x} gagne`,oRematch:'Revanche',oGone:'Ton rival est parti',oOff:'hors ligne',oNoStats:'Aucun match en ligne.',oNeedMail:'Écris d’abord ton e-mail dans l’écran Duel en ligne pour voir tes stats en ligne.',ok:'OK',you:'TOI',bot:'BOT',
  stat:(c,n,p)=>`Depuis 1990 · ${c} clubs · ${n} sélections · ${p} joueurs`,
  mAll:'Tous les clubs',natTeam:'Sélection nationale',mAllD:'N’importe quel club de 9 championnats',mOne:'Un championnat',mOneD:'Les deux choisissent dans le même championnat',mTwo:'Ligue × Ligue',mTwoD:'Un championnat chacun · on échange à chaque tour',mNat:'Sélection × Club',mNatD:'Une sélection, un club · on échange à chaque tour',
  hAll:'Tous les clubs des neuf championnats.',hOne:'Choisis un championnat.',hTwo:'Choisis deux championnats.',hNat:'Un tour tu choisis une sélection, le tour suivant c’est ton rival.',
@@ -553,7 +568,7 @@ function reveal(w,p,title){
     const win=G.me>=WIN;saveMatch(win);
     body.innerHTML=`<div class="d res ${win?'me':'bot'}">${win?t('gWin'):t('gLose')}</div>${cards?cw():''}
       <div class="endbtns"><button class="btn" id="again">${t('again')}</button><button class="btn ghost" id="hm">${t('menu')}</button></div>`;
-    $('again').onclick=()=>$('play').click();$('hm').onclick=()=>{G=null;show('home')};
+    $('again').onclick=()=>$('play').click();$('hm').onclick=()=>{G=null;show('home')};if(win)shareBtn(G.me,G.bot,'Bot · '+t(diff));
     return;
   }
   body.innerHTML=`<div class="d res ${cls}">${title}</div>${cards?cw()+more:''}
@@ -630,6 +645,8 @@ const net={
     const r=NET.db.ref(p),h=r.on('value',x=>cb(x.val()));return()=>r.off('value',h)},
   tx:(p,fn)=>{if(NET.mock){const v=mGet(p),nv=fn(v==null?null:JSON.parse(JSON.stringify(v)));if(nv===undefined)return Promise.resolve({ok:false,val:v});mSet(p,nv);return Promise.resolve({ok:true,val:nv})}
     let skip=false;return NET.db.ref(p).transaction(cur=>{skip=false;const nv=fn(cur);if(nv===undefined){if(cur===null){skip=true;return null}return}return nv},undefined,false).then(r=>({ok:r.committed&&!skip,val:r.snapshot.val()}))},
+  top:(p,child,n)=>{const srt=o=>Object.entries(o||{}).map(([k,v])=>Object.assign({k},v)).sort((a,b)=>(b[child]||0)-(a[child]||0)||(a.p||0)-(b.p||0)).slice(0,n);
+    if(NET.mock){const o={},pre=MK+':'+p+'/';for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith(pre))o[k.slice(pre.length)]=mLoad(k)}return Promise.resolve(srt(o))}const r=NET.db.ref(p);return r.orderByChild(child).limitToLast(n).get().then(x=>srt(x.val())).catch(()=>r.get().then(x=>srt(x.val())))},
   bye:(p,v)=>{if(NET.mock)mBye.push([p,v]);else NET.db.ref(p).onDisconnect().set(v)},
   unbye:p=>{if(NET.mock)mBye=mBye.filter(x=>x[0]!==p);else NET.db.ref(p).onDisconnect().cancel()}
 };
@@ -655,8 +672,8 @@ async function hashMail(m){
   try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('cift-forma:'+m));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,40)}
   catch(e){let h=2166136261;for(const c of m){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return'f'+(h>>>0).toString(16)+m.length}
 }
-async function setMail(m){m=m.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))return false;
-  ME={k:await hashMail(m),n:m.split('@')[0].slice(0,16),m};store.set('cf-me',JSON.stringify(ME));return true}
+async function setMail(m,nick){m=m.trim().toLowerCase();nick=(nick||'').replace(/[<>&"']/g,'').trim().slice(0,16);if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))return false;
+  ME={k:await hashMail(m),n:nick||m.split('@')[0].slice(0,16),m};store.set('cf-me',JSON.stringify(ME));return true}
 
 /* ---------- ONLINE: oda ve oyun ---------- */
 const other=s=>s==='a'?'b':'a';
@@ -756,6 +773,7 @@ const ON={code:null,slot:null,un:null,key:null,room:null,rand:false,started:fals
       const win=st['s'+me]>=WIN;FX.match(win);this.record(win,st);
       body.innerHTML=`<div class="d res ${win?'me':'bot'}">${win?t('gWin'):t('oOppWin',esc(G.opp))}</div>${cards}
         <div class="endbtns"><button class="btn" id="again">${t('oRematch')}</button><button class="btn ghost" id="hm">${t('menu')}</button></div>`;
+      if(win)shareBtn(st['s'+me],st['s'+o],G.opp);
       $('again').onclick=()=>net.tx(this.path(),x=>{if(!x||x.st.phase!=='over')return;x.st={phase:'lobby',round:0,sa:0,sb:0,wa:0,wb:0,t0:net.now()};x.rec=null;x.p.a.ready=0;x.p.b.ready=0;return x});
       $('hm').onclick=()=>{this.leave();G=null;paintAll();show('home')};
       return;
@@ -799,7 +817,7 @@ const ON={code:null,slot:null,un:null,key:null,room:null,rand:false,started:fals
   record(win,st){
     const me=this.slot,o=other(me),entry={d:net.now(),w:win?1:0,m:st['s'+me],b:st['s'+o],o:G.opp};
     net.tx(this.path('rec/'+me),v=>v?undefined:true).then(r=>{if(!r.ok)return;
-      net.tx('stats/'+ME.k,s=>{s=s||{p:0,w:0};s.p=(s.p||0)+1;if(win)s.w=(s.w||0)+1;s.h=[entry].concat(s.h||[]).slice(0,50);return s})});
+      net.tx('stats/'+ME.k,s=>{s=s||{p:0,w:0};s.p=(s.p||0)+1;if(win)s.w=(s.w||0)+1;s.h=[entry].concat(s.h||[]).slice(0,50);return s}).then(r2=>{const s=r2.val;if(s)net.set('board/'+ME.k.slice(0,16),{n:ME.n,w:s.w||0,p:s.p||0,t:net.now()}).catch(()=>{})})});
   }
 };
 function paintOnline(err){
@@ -807,8 +825,9 @@ function paintOnline(err){
   if(!ME){
     o.innerHTML=`<div class="card"><h2>${t('oMail')}</h2><small>${t('oMailD')}</small>
       <input class="q" id="omail" type="email" inputmode="email" autocomplete="email" style="margin-top:10px" placeholder="ad@ornek.com">
+      <input class="q" id="onick" maxlength="16" autocomplete="nickname" style="margin-top:8px" placeholder="${t('oNick')}">
       <div class="msg bad" id="oerr"></div><button class="btn" id="ogo">${t('oGo')}</button></div>`;
-    $('ogo').onclick=async()=>{if(await setMail($('omail').value)){paintOnline();netInit().then(saveMail).catch(()=>{})}else $('oerr').textContent=t('oBadMail')};
+    $('ogo').onclick=async()=>{if(await setMail($('omail').value,$('onick').value)){paintOnline();netInit().then(saveMail).catch(()=>{})}else $('oerr').textContent=t('oBadMail')};
     return;
   }
   if(ON.code&&r&&!r.p.b){
@@ -835,6 +854,41 @@ function paintOnline(err){
   if(PRE){$('ocode').value=PRE;PRE=''}
 }
 let PRE='';try{PRE=(new URLSearchParams(location.search).get('oda')||'').toUpperCase().slice(0,4)}catch(e){}
+/* ---------- SIRALAMA ---------- */
+function paintBoard(){const b=$('blist');b.innerHTML='';
+  netInit().then(()=>net.top('board','w',30)).then(rows=>{rows=rows.filter(r=>r.w>0);
+    const mine=ME?ME.k.slice(0,16):'';
+    b.innerHTML=rows.length?rows.map((r,i)=>`<div class="brow${r.k===mine?' me':''}"><span class="r">${i+1}</span><span class="n">${esc(String(r.n||'?'))}</span><span class="w">${r.w}</span><span class="p">${t('bPlayed',r.p||r.w)}</span></div>`).join(''):`<div class="note">${t('bEmpty')}</div>`;
+  }).catch(()=>{b.innerHTML=`<div class="note">${t('bErr')}</div>`})}
+$('toB').onclick=()=>{show('boardscr');paintBoard()};
+
+/* ---------- PAYLAŞ: sonuç kartı (1080×1920, hikâye boyutu) ---------- */
+const SITE='https://twoshirtsgame.com',SITE_TXT='twoshirtsgame.com';
+function shareBtn(my,opp,oppName){const b=document.createElement('button');b.className='btn share';b.textContent=t('share');b.onclick=()=>shareWin(my,opp,oppName,b);const e=document.querySelector('#game .endbtns');if(e)e.parentNode.insertBefore(b,e.nextSibling)}
+async function shareCard(my,opp,oppName){
+  try{await document.fonts.load('800 100px "Barlow Condensed"')}catch(e){}
+  const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),F=(w,sz)=>`${w} ${sz}px "Barlow Condensed","Arial Narrow",sans-serif`;
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#143021');g.addColorStop(.55,'#08130f');g.addColorStop(1,'#050b08');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.strokeStyle='rgba(198,241,53,.10)';x.lineWidth=4;x.beginPath();x.arc(W/2,H/2,330,0,7);x.moveTo(0,H/2);x.lineTo(W,H/2);x.stroke();
+  x.textAlign='center';const name=(L==='tr'?'ÇİFT FORMA':L==='fr'?'DEUX MAILLOTS':'TWO SHIRTS').split(' ');
+  x.fillStyle='#eef5f0';x.font=F(800,150);x.fillText(name[0],W/2,330);x.fillStyle='#c6f135';x.fillText(name[1],W/2,470);
+  x.fillStyle='#c6f135';x.font=F(800,210);x.fillText(t('shWin'),W/2,840);
+  x.fillStyle='#eef5f0';x.font=F(800,420);x.fillText(my+' – '+opp,W/2,1250);
+  x.fillStyle='#8aa397';x.font=F(600,64);x.fillText((t('shVs')+': '+oppName).slice(0,34),W/2,1380);
+  x.fillStyle='#c6f135';const bw=760,bh=150,bx=(W-bw)/2,by=1560;x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,40):x.rect(bx,by,bw,bh);x.fill();
+  x.fillStyle='#0b1a05';x.font=F(800,84);x.fillText(SITE_TXT,W/2,by+102);
+  x.fillStyle='#eef5f0';x.font=F(700,60);x.fillText(t('shCta'),W/2,by-40);
+  return new Promise(r=>c.toBlob(r,'image/png'));
+}
+async function shareWin(my,opp,oppName,btn){
+  btn.disabled=true;
+  try{const blob=await shareCard(my,opp,oppName),file=new File([blob],'two-shirts.png',{type:'image/png'}),text=t('shText')+' '+SITE;
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text,url:SITE})}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='two-shirts.png';a.click();try{await navigator.clipboard.writeText(text)}catch(e){}btn.textContent=t('shSaved')}
+  }catch(e){}
+  btn.disabled=false;
+}
+
 /* ---------- HATA BİLDİR: yalnızca yazılabilen 'reports' dalına kaydedilir; window.REPORT_HOOK tanımlıysa oraya da iletilir ---------- */
 let LASTSCR='home';
 function repOpen(){LASTSCR=(document.querySelector('.scr.on')||{}).id||'?';$('reptx').value='';$('repmsg').textContent='';$('repok').disabled=false;$('rep').classList.add('on');setTimeout(()=>$('reptx').focus(),50)}
