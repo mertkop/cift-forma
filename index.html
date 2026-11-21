@@ -32,9 +32,12 @@ input{-webkit-user-select:text;user-select:text}
 .mut{color:var(--mut)}
 .toprow{display:flex;justify-content:space-between;align-items:center}
 .pill{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:600;font-size:13px}
-.lang{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px}
-.lang button{padding:4px 11px;border-radius:999px;font-weight:600;font-size:13px;color:var(--mut)}
-.lang button.on{background:var(--acc);color:#0b1a05}
+.lang{position:relative}
+#lbtn{display:flex;align-items:center;gap:6px}
+.lmenu{display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:150px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:5px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.lmenu.on{display:block}
+.lmenu button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:10px;font-weight:600;font-size:15px;color:var(--ink)}
+.lmenu button.on{background:var(--acc);color:#0b1a05}
 .logo{margin-top:2vh;text-align:center}
 .logo h1{font-size:60px;line-height:.9}
 .logo h1 b{color:var(--acc)}
@@ -185,11 +188,11 @@ input{-webkit-user-select:text;user-select:text}
 </style>
 </head>
 <body>
-<div id="langpick"><h1>Dil · Language · Langue</h1><button data-l="tr">Türkçe</button><button data-l="en">English</button><button data-l="fr">Français</button></div>
+<div id="langpick"><h1>Langue · Language · Dil</h1><button data-l="fr">Français</button><button data-l="en">English</button><button data-l="tr">Türkçe</button></div>
 <div id="app">
 
 <section class="scr on" id="home">
-  <div class="toprow"><span style="display:flex;gap:6px"><button class="pill" id="toS" data-t="stats"></button><button class="pill" id="toB" data-t="board"></button></span><div class="lang"><button data-l="tr">TR</button><button data-l="en">EN</button><button data-l="fr">FR</button></div></div>
+  <div class="toprow"><span style="display:flex;gap:6px"><button class="pill" id="toS" data-t="stats"></button><button class="pill" id="toB" data-t="board"></button></span><div class="lang"><button class="pill" id="lbtn" aria-haspopup="true" aria-expanded="false" aria-label="Langue / Language / Dil"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg><span id="lcur"></span></button><div class="lmenu" id="lmenu"><button data-l="fr">Français</button><button data-l="en">English</button><button data-l="tr">Türkçe</button></div></div></div>
   <div class="logo"><h1 id="ttl"></h1><p data-t="tag"></p></div>
   <div class="menu">
     <button class="card rowbtn hot" id="toO">
@@ -277,7 +280,7 @@ input{-webkit-user-select:text;user-select:text}
 </section>
 
 </div>
-<script src="config.js?v=6"></script>
+<script src="config.js?v=7"></script>
 <script src="data.js?v=2"></script>
 <script>
 /* ---------- dil ---------- */
@@ -332,7 +335,7 @@ const S={tr:{
 }};
 const store={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const NAVL=(navigator.language||'tr').toLowerCase(),FIRST=!store.get('cf-lang','');
-let L=store.get('cf-lang',NAVL.startsWith('tr')?'tr':NAVL.startsWith('fr')?'fr':'en');if(!S[L])L='en';
+let L=store.get('cf-lang',NAVL.startsWith('tr')?'tr':NAVL.startsWith('en')?'en':'fr');if(!S[L])L='en';
 const LOC={tr:'tr-TR',en:'en-GB',fr:'fr-FR'},WL={tr:['G','M'],en:['W','L'],fr:['V','D']};
 const t=(k,...a)=>{const v=S[L][k];return typeof v==='function'?v(...a):v};
 const $=id=>document.getElementById(id);
@@ -395,14 +398,17 @@ function paintAll(){
   document.documentElement.lang=L;
   document.querySelectorAll('[data-t]').forEach(e=>e.innerHTML=t(e.dataset.t));try{paintOnl()}catch(e){}
   $('ttl').innerHTML=t('ttl');
-  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+  document.querySelectorAll('.lmenu button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));$('lcur').textContent=L.toUpperCase();
   document.querySelectorAll('#diff button').forEach(b=>b.classList.toggle('on',b.dataset.d===diff));
   $('cname').textContent=conName();
   $('stat').textContent=DBok?t('stat',T.filter(x=>!x.nat).length,T.filter(x=>x.nat).length,PL.length.toLocaleString(LOC[L])):t('err');
   $('xq').placeholder=t('phTeam');
   $('play').disabled=!DBok;$('toO').disabled=!DBok;
 }
-document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{L=b.dataset.l;store.set('cf-lang',L);paintAll()});
+const lmenu=on=>{$('lmenu').classList.toggle('on',on);$('lbtn').setAttribute('aria-expanded',on)};
+$('lbtn').onclick=e=>{e.stopPropagation();lmenu(!$('lmenu').classList.contains('on'))};
+document.addEventListener('click',()=>lmenu(false));
+document.querySelectorAll('.lmenu button').forEach(b=>b.onclick=()=>{L=b.dataset.l;store.set('cf-lang',L);lmenu(false);paintAll()});
 if(FIRST)$('langpick').classList.add('on');
 document.querySelectorAll('#langpick button').forEach(b=>b.onclick=()=>{L=b.dataset.l;store.set('cf-lang',L);$('langpick').classList.remove('on');paintAll()});
 document.querySelectorAll('#diff button').forEach(b=>b.onclick=()=>{diff=b.dataset.d;store.set('cf-diff',diff);paintAll()});
